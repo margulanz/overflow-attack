@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+
+  ryu:
+    build: ./ryu
+    container_name: ryu
+   # command: ryu-manager apps.telemetry ryu.app.simple_switch_13
+    volumes:
+      - ./ryu/apps:/apps/apps
+    network_mode: host
+    #ports:
+    #  - "6633:6633"
+    #  - "6653:6653"
+    #  - "8080:8080"
+    #networks:
+    #  - sdn
+
+  mininet:
+    build: ./mininet
+    container_name: mininet
+    privileged: true
+    stdin_open: true      # Add this
+    tty: true             # Add this
+    command: >
+      bash -c "service openvswitch-switch start && 
+             sleep 2 && 
+             python3 /topo/topology.py"
+    volumes:
+      - /lib/modules:/lib/modules
+      - ./mininet:/topo
+    networks:
+      - sdn
+    depends_on:
+      - ryu
+networks:
+  sdn:
+    driver: bridge
+
