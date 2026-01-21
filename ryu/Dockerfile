@@ -17,4 +17,4 @@ COPY apps /root/apps
 # Add apps to Python path
 ENV PYTHONPATH=/root:$PYTHONPATH
 
-CMD ["ryu-manager", "--log-file=/var/log/ryu.log","ryu.app.simple_switch_stp_13", "apps.telemetry"]
+CMD ["ryu-manager", "--log-file=/var/log/ryu.log","--observe-links","apps.multipath", "apps.telemetry"]

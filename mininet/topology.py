@@ -15,7 +15,7 @@ import threading
 RYU_CONTROLLER_IP = "127.0.0.1"
 
 class SaturationTopology:
-    def __init__(self, num_attackers=20, num_victims=3):
+    def __init__(self, num_attackers=70, num_victims=3):
         self.num_attackers = num_attackers
         self.num_victims = num_victims
         self.net = None
@@ -253,7 +253,7 @@ def attack_scenario_2():
     print("SCENARIO 2: Sudden Burst Attack")
     print("="*70)
     
-    topo = SaturationTopology(num_attackers=30, num_victims=3)
+    topo = SaturationTopology(num_attackers=70, num_victims=3)
     topo.create_topology()
     topo.start_network()
     

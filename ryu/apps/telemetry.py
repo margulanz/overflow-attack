@@ -244,41 +244,41 @@ class AdaptiveTimeoutController(app_manager.RyuApp):
         actions = [parser.OFPActionOutput(out_port)]
 
         # Install flow with adaptive timeout
-        if out_port != ofproto.OFPP_FLOOD:
-            match = parser.OFPMatch(in_port=in_port, eth_dst=dst, eth_src=src)
+       # if out_port != ofproto.OFPP_FLOOD:
+            # match = parser.OFPMatch(in_port=in_port, eth_dst=dst, eth_src=src)
             
             # Get flow statistics (if exists)
-            flow_key = self._create_flow_key(dpid, match)
-            flow_stats = self.flow_stats.get(flow_key, None)
+           # flow_key = self._create_flow_key(dpid, match)
+           # flow_stats = self.flow_stats.get(flow_key, None)
             
-            # Calculate adaptive timeout
-            hard_timeout, idle_timeout = self.timeout_calculator.calculate_timeout(
-                dpid=dpid,
-                match=match,
-                packet_info=packet_info,
-                flow_stats=flow_stats,
-                switch_stats=self.switch_stats[dpid]
-            )
+           # # Calculate adaptive timeout
+           # hard_timeout, idle_timeout = self.timeout_calculator.calculate_timeout(
+                    # dpid=dpid,
+                # match=match,
+                # packet_info=packet_info,
+                # flow_stats=flow_stats,
+                # switch_stats=self.switch_stats[dpid]
+                # )
             
-            #Log timeout decision
-            self.logger.info("Flow timeout: hard=%ds, idle=%ds (protocol=%s, size=%dB)",
-                            hard_timeout, idle_timeout,
-                            packet_info['protocol'], packet_info['size'])
+            # #Log timeout decision
+           # self.logger.info("Flow timeout: hard=%ds, idle=%ds (protocol=%s, size=%dB)",
+                             # hard_timeout, idle_timeout,
+                             #               packet_info['protocol'], packet_info['size'])
             
-            # Verify that packet has a buffer_id
-            if msg.buffer_id != ofproto.OFP_NO_BUFFER:
-                self.add_flow(datapath, 1, match, actions, 
-                             hard_timeout, idle_timeout, msg.buffer_id)
-                return
-            else:
-                self.add_flow(datapath, 1, match, actions,
-                             hard_timeout, idle_timeout)
+            # # Verify that packet has a buffer_id
+           # if msg.buffer_id != ofproto.OFP_NO_BUFFER:
+                # self.add_flow(datapath, 1, match, actions, 
+                              #                hard_timeout, idle_timeout, msg.buffer_id)
+            #    return
+           # else:
+                # self.add_flow(datapath, 1, match, actions,
+                              #                     hard_timeout, idle_timeout)
 
-        data = None
-        if msg.buffer_id == ofproto.OFP_NO_BUFFER:
+        #data = None
+        #if msg.buffer_id == ofproto.OFP_NO_BUFFER:
             data = msg.data
 
-        out = parser.OFPPacketOut(datapath=datapath, buffer_id=msg.buffer_id,
+        #out = parser.OFPPacketOut(datapath=datapath, buffer_id=msg.buffer_id,
                                   in_port=in_port, actions=actions, data=data)
         #datapath.send_msg(out)
 
