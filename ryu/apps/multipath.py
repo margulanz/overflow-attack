@@ -92,12 +92,12 @@ class Controller13(app_manager.RyuApp):
                 self._request_flow_stats(dp)
                 self._update_switch_metrics(dpid)
             hub.sleep(5)  # Collect stats every 5 seconds
-    @set_ev_cls(ofp_event.EventOFPStateChange,
-                [MAIN_DISPATCHER, CONFIG_DISPATCHER])
+
     def _update_switch_metrics(self, dpid):
         """Update switch-level metrics"""
         current_time = time.time()
         
+        #self.logger.info("UPDATE SWITCH METRICS IS RUNNING")
         # Calculate packet-in rate
         timestamps = self.packet_in_timestamps[dpid]
         recent_timestamps = [t for t in timestamps if current_time - t < 10]
@@ -134,16 +134,16 @@ class Controller13(app_manager.RyuApp):
         self.logger.info("Switch %016x: Occupancy=%.2f%%, PacketIn Rate=%.1f/s, Entropy=%.2f",
                         dpid, occupancy_rate * 100, packet_in_rate, 0)
     
-
+    @set_ev_cls(ofp_event.EventOFPStateChange,
+                [MAIN_DISPATCHER, CONFIG_DISPATCHER])
     def _state_change_handler(self, ev):
         datapath = ev.datapath
         if ev.state == MAIN_DISPATCHER:
             if datapath.id not in self.datapaths:
-                self.logger.info('Register datapath: %016x', datapath.id)
                 self.datapaths[datapath.id] = datapath
         elif ev.state == 'DEAD_DISPATCHER':
             if datapath.id in self.datapaths:
-                self.logger.info('Unregister datapath: %016x', datapath.id)
+                #self.logger.info('Unregister datapath: %016x', datapath.id)
                 del self.datapaths[datapath.id]
     
 
@@ -184,8 +184,8 @@ class Controller13(app_manager.RyuApp):
         # Update switch stats with flow distribution
         self.switch_stats[dpid]['flow_distribution'] = dict(flow_distribution)
         
-        self.logger.info('Datapath %016x - Flow Table Occupancy: %d flows',
-                        dpid, self.flow_table_size.get(dpid, 0))
+        #self.logger.info('Datapath %016x - Flow Table Occupancy: %d flows',
+         #               dpid, self.flow_table_size.get(dpid, 0))
     
 
     def find_path_cost(self, path):
@@ -296,13 +296,13 @@ class Controller13(app_manager.RyuApp):
                 match_arp = ofp_parser.OFPMatch(in_port = in_port,eth_type=ether_types.ETH_TYPE_ARP, arp_spa=ip_src, arp_tpa=ip_dst)
                 self.add_flow(dp, 1, match_arp, actions, 10)
         
-            self.logger.info("Installed path in switch: %s out port: %s in port: %s",node, out_port, in_port)
+            #self.logger.info("Installed path in switch: %s out port: %s in port: %s",node, out_port, in_port)
         return self.path_with_ports_table[(src, first_port, dst, last_port)][0][src][1]
 
     def add_flow(self, datapath, priority, match, actions, idle_timeout, buffer_id = None):
         ''' Method Provided by the source Ryu library.'''
         
-        self.logger.info("Adding flow to switch")
+        #self.logger.info("Adding flow to switch")
         ofproto = datapath.ofproto 
         parser = datapath.ofproto_parser 
 
@@ -325,7 +325,7 @@ class Controller13(app_manager.RyuApp):
 
     def topology_discover(self, src, first_port, dst, last_port):
         
-        self.logger.info("Topology discover")
+        #self.logger.info("Topology discover")
         #threading.Timer(1.0, self.topology_discover, args=(src, first_port, dst, last_port)).start()
         paths = self.find_paths_and_costs(src, dst)
         path = self.find_n_optimal_paths(paths)

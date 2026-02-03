@@ -6,7 +6,7 @@ WARNING: Use only in controlled test environments
 """
 
 from mininet.net import Mininet
-from mininet.node import RemoteController, OVSSwitch
+from mininet.node import RemoteController, OVSSwitch, OVSKernelSwitch
 from mininet.cli import CLI
 from mininet.log import setLogLevel
 import time
@@ -25,28 +25,28 @@ class SaturationTopology:
         print(f"[*] Creating topology with {self.num_attackers} attacker hosts")
         
         # Create Mininet without default controller
-        net = Mininet(controller=None, switch=OVSSwitch)
+        net = Mininet(controller=RemoteController, switch=OVSKernelSwitch)
         
         # Add Ryu remote controller
-        c0 = net.addController(
+        self.c0 = net.addController(
             name='c0',
             controller=RemoteController,
             ip=RYU_CONTROLLER_IP,
-            port=6633
+            port=6653
         )
         
         # Create switches
-        s1 = net.addSwitch('s1', protocols='OpenFlow13')
-        s2 = net.addSwitch('s2', protocols='OpenFlow13')
-        s3 = net.addSwitch('s3', protocols='OpenFlow13')
-        s4 = net.addSwitch('s4', protocols='OpenFlow13')
+        self.s1 = net.addSwitch('s1', protocols='OpenFlow13')
+        self.s2 = net.addSwitch('s2', protocols='OpenFlow13')
+        self.s3 = net.addSwitch('s3', protocols='OpenFlow13')
+        self.s4 = net.addSwitch('s4', protocols='OpenFlow13')
         
         # Create mesh topology between switches
-        net.addLink(s1, s2)
-        net.addLink(s1, s3)
-        net.addLink(s2, s3)
-        net.addLink(s2, s4)
-        net.addLink(s3, s4)
+        net.addLink(self.s1, self.s2)
+        net.addLink(self.s1, self.s3)
+        net.addLink(self.s2, self.s3)
+        net.addLink(self.s2, self.s4)
+        net.addLink(self.s3, self.s4)
         
         # Create attacker hosts (distributed across switches)
         attackers = []
@@ -56,29 +56,29 @@ class SaturationTopology:
             
             # Distribute attackers across switches
             if i % 4 == 0:
-                net.addLink(host, s1)
+                net.addLink(host, self.s1, bw=1)
             elif i % 4 == 1:
-                net.addLink(host, s2)
+                net.addLink(host, self.s2, bw=1)
             elif i % 4 == 2:
-                net.addLink(host, s3)
+                net.addLink(host, self.s3, bw=1)
             else:
-                net.addLink(host, s4)
+                net.addLink(host, self.s4, bw=1)
             
             attackers.append(host)
         
         # Create victim hosts
         victims = []
         for i in range(self.num_victims):
-            ip = f'10.0.1.{i+1}/24'
+            ip = f'10.0.0.{i+6}/24'
             host = net.addHost(f'victim{i+1}', ip=ip)
             
             # Connect victims to different switches
             if i == 0:
-                net.addLink(host, s2)
+                net.addLink(host, self.s2, bw=1)
             elif i == 1:
-                net.addLink(host, s3)
+                net.addLink(host, self.s3, bw=1)
             else:
-                net.addLink(host, s4)
+                net.addLink(host, self.s4, bw=1)
             
             victims.append(host)
         
@@ -91,15 +91,19 @@ class SaturationTopology:
     def start_network(self):
         """Start the network"""
         print("[*] Starting network...")
-        self.net.start()
-        
+        self.net.build()
+        self.c0.start()
+        self.s1.start([self.c0])
+        self.s2.start([self.c0])
+        self.s3.start([self.c0])
+        self.s4.start([self.c0])
         # Wait for switches to connect
         print("[*] Waiting for switches to connect to controller...")
         time.sleep(3)
         
         # Test connectivity
         print("[*] Testing connectivity...")
-        self.net.pingAll()
+        #self.net.pingAll()
         
         return True
     
@@ -301,35 +305,35 @@ def interactive_mode():
 
 
 def main():
-    print("="*70)
-    print("Flow Table Saturation Attack Framework")
-    print("="*70)
-    print("\nScenarios:")
-    print("1. Gradual Saturation (15 attackers, 3 phases)")
-    print("2. Sudden Burst (30 attackers, high rate)")
-    print("3. Interactive Mode (custom configuration)")
-    print("4. Quick Test (5 attackers, 30s)")
+    #print("="*70)
+    #print("Flow Table Saturation Attack Framework")
+    #print("="*70)
+    #print("\nScenarios:")
+    #print("1. Gradual Saturation (15 attackers, 3 phases)")
+    #print("2. Sudden Burst (30 attackers, high rate)")
+    #print("3. Interactive Mode (custom configuration)")
+    #print("4. Quick Test (5 attackers, 30s)")
     
-    choice = input("\nSelect scenario (1-4): ")
+    #choice = input("\nSelect scenario (1-4): ")
     
-    if choice == '1':
-        attack_scenario_1()
-    elif choice == '2':
-        attack_scenario_2()
-    elif choice == '3':
-        interactive_mode()
-    elif choice == '4':
+    #if choice == '1':
+    #    attack_scenario_1()
+    #elif choice == '2':
+    #    attack_scenario_2()
+    #elif choice == '3':
+    #    interactive_mode()
+    #elif choice == '4':
         # Quick test
-        topo = SaturationTopology(num_attackers=5, num_victims=2)
-        topo.create_topology()
-        topo.start_network()
-        topo.monitor_flows()
-        topo.launch_attack(attack_type='syn_flood', duration=30, rate=200)
-        topo.monitor_flows()
-        CLI(topo.net)
-        topo.stop()
-    else:
-        print("[!] Invalid choice")
+    topo = SaturationTopology(num_attackers=5, num_victims=2)
+    topo.create_topology()
+    topo.start_network()
+    #topo.monitor_flows()
+    #topo.launch_attack(attack_type='syn_flood', duration=30, rate=200)
+    #topo.monitor_flows()
+    CLI(topo.net)
+    topo.stop()
+    #else:
+    #    print("[!] Invalid choice")
 
 
 if __name__ == '__main__':
