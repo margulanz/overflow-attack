@@ -8,6 +8,7 @@ services:
    # command: ryu-manager apps.telemetry ryu.app.simple_switch_13
     volumes:
       - ./ryu/apps:/apps/apps
+      - ./results:/results 
     network_mode: host
     #ports:
     #  - "6633:6633"
