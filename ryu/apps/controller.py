@@ -23,7 +23,7 @@ import atexit
 from collections import defaultdict, deque
 from ryu.base import app_manager
 from ryu.controller import ofp_event
-from ryu.controller.handler import CONFIG_DISPATCHER, MAIN_DISPATCHER
+from ryu.controller.handler import CONFIG_DISPATCHER, MAIN_DISPATCHER, DEAD_DISPATCHER
 from ryu.controller.handler import set_ev_cls
 from ryu.ofproto import ofproto_v1_3
 from ryu.lib.packet import packet
@@ -39,7 +39,7 @@ class SimpleSwitch13(app_manager.RyuApp):
     def __init__(self, *args, **kwargs):
         super(SimpleSwitch13, self).__init__(*args, **kwargs)
         self.mac_to_port = {}
-        
+        self.datapaths = {}
         # flow statistics
         self.flow_stats = defaultdict(lambda: {
             "packet_count": 0,
@@ -71,7 +71,14 @@ class SimpleSwitch13(app_manager.RyuApp):
         signal.signal(signal.SIGTERM, self._signal_handler)
         signal.signal(signal.SIGINT, self._signal_handler)
         atexit.register(self._write_metrics)
-        
+    @set_ev_cls(ofp_event.EventOFPStateChange,
+            [MAIN_DISPATCHER, DEAD_DISPATCHER])
+    def _state_change_handler(self, ev):
+        datapath = ev.datapath
+        if ev.state == MAIN_DISPATCHER:
+            self.datapaths[datapath.id] = datapath
+        elif ev.state == DEAD_DISPATCHER:
+            self.datapaths.pop(datapath.id, None)
     @set_ev_cls(ofp_event.EventOFPFlowRemoved, MAIN_DISPATCHER)
     def flow_removed_handler(self, ev):
         match = ev.msg.match
@@ -88,9 +95,37 @@ class SimpleSwitch13(app_manager.RyuApp):
         self._write_metrics()
     def _monitor(self):
 		while True:
-		    hub.sleep(.01)  # sample every 1 second
+		    for dp in self.datapaths.values():
+		        self._request_stats(dp)
+		        
+		    hub.sleep(.5)  # sample every 1 second
 		    self._collect_metrics()
-		    
+    def _request_stats(self, datapath):
+        parser = datapath.ofproto_parser
+        req = parser.OFPFlowStatsRequest(datapath)
+        datapath.send_msg(req)
+    @set_ev_cls(ofp_event.EventOFPFlowStatsReply, MAIN_DISPATCHER)
+    def _flow_stats_reply_handler(self, ev):
+        for stat in ev.msg.body:
+
+            # Only consider your installed flows (priority 1)
+            if stat.priority != 1:
+                continue
+
+            match = stat.match
+
+            if ('eth_src' in match and
+                'eth_dst' in match and
+                'in_port' in match):
+
+                flow_id = (
+                    match['eth_src'],
+                    match['eth_dst'],
+                    match['in_port']
+                )
+                self.logger.info(stat.packet_count)
+                if flow_id in self.flow_stats:
+                    self.flow_stats[flow_id]["packet_count"] = stat.packet_count
     def _collect_metrics(self):
 		now = time.time() - self.start_time
 		#process = psutil.Process(os.getpid())
@@ -102,7 +137,7 @@ class SimpleSwitch13(app_manager.RyuApp):
 		    "cpu_percent": self.process.cpu_percent(interval=None),
 		    "memory_mb": self.process.memory_info().rss / (1024 * 1024),
 		}
-		self.logger.info(record)
+		#self.logger.info(record)
 		self.metrics.append(record)
    
     def compute_idle_timeout(self, flow_id):
@@ -194,7 +229,7 @@ class SimpleSwitch13(app_manager.RyuApp):
 
     @set_ev_cls(ofp_event.EventOFPPacketIn, MAIN_DISPATCHER)
     def _packet_in_handler(self, ev):
-    	self.packet_in_count += 1
+    	#self.packet_in_count += 1
         # If you hit this you might want to increase
         # the "miss_send_length" of your switch
         if ev.msg.msg_len < ev.msg.total_len:
@@ -223,7 +258,7 @@ class SimpleSwitch13(app_manager.RyuApp):
             return
         now = time.time()
         flow = self.flow_stats[flow_id]
-        flow["packet_count"] += 1
+        #flow["packet_count"] += 1
         if flow["last_seen"] is not None:
         	iat = now - flow["last_seen"]
         	flow["iat_window"].append(iat)
@@ -252,9 +287,8 @@ class SimpleSwitch13(app_manager.RyuApp):
                 return
             else:
                 self.add_flow(datapath, 1, match, actions,idle_timeout=idle_timeout, hard_timeout=10)
-            self.logger.info("adding new flow!")
-        else:
-            self.logger.info("tcpreply here?")
+            #self.logger.info("adding new flow!")
+        
         data = None
         if msg.buffer_id == ofproto.OFP_NO_BUFFER:
             data = msg.data

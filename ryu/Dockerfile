@@ -1,14 +1,23 @@
 FROM osrg/ryu
 
 # Install build tools for Python 2
+RUN echo 'Acquire::http::Pipeline-Depth "0";' > /etc/apt/apt.conf.d/99fixbadproxy \
+ && echo 'Acquire::http::No-Cache "true";' >> /etc/apt/apt.conf.d/99fixbadproxy \
+ && echo 'Acquire::BrokenProxy "true";' >> /etc/apt/apt.conf.d/99fixbadproxy
+ 
+
 RUN apt-get update && apt-get install -y \
     gcc \
     python-dev \
     python-pip \
-    build-essential
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
 
+COPY KazDreamCyberGuard.crt /usr/local/share/ca-certificates/
+RUN apt-get update && apt-get install -y ca-certificates \
+ && update-ca-certificates
 # Install Python-2-compatible psutil
-RUN pip install "psutil<6"
+RUN pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org  "psutil<6"
 WORKDIR /root
 # Copy the entire apps folder as a module
 COPY apps /root/apps
