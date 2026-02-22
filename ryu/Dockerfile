@@ -16,7 +16,13 @@ COPY apps /root/apps
 # Add apps to Python path
 ENV PYTHONPATH=/root:$PYTHONPATH
 
-#CMD ["ryu-manager", "--observe-links" ,"apps.git_multipath"]
-#CMD ["ryu-manager", "--observe-links","apps.multipath"]
+
 #CMD ["ryu-manager", "ryu.app.simple_switch_13"]
-CMD ["ryu-manager", "apps.controller", "ryu.app.ofctl_rest"]
+#CMD ["ryu-manager", "apps.controller", "ryu.app.ofctl_rest"]
+
+
+# MODE can be fixed or adaptive
+ENV MODE=adaptive
+
+ENV FIXED_TIMEOUT=10
+CMD ["ryu-manager", "apps.vita-controller"]

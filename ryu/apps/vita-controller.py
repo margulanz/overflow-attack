@@ -53,20 +53,30 @@ class SimpleSwitch13(app_manager.RyuApp):
             self.logger.info("Fixed timeout: %d", self.fixed_timeout)
         # flow statistics
         self.flow_stats = defaultdict(lambda: {
-            "packet_count": 0,
-            "last_seen": None,
-            "iat_window": deque(maxlen=10),  # inter-arrival samples
-        })
-        
-        # --- Parameters (thesis-controlled) ---
-        self.T_MIN = 1
-        self.T_MAX = 60
-        self.ALPHA = 2.0 # packet count weight
-        self.BETA = 5.0 # activity weight
-        self.DELTA = 10.0 # congestion penalty
-        self.GAMMA = 1.5 # latency safety factor
+			# --- VITA core metrics ---
+			"npacketIn": 0,
+			"tpacketIn": None,
+			"tlastRemoved": None,
+			"tlastDuration": None,
 
+			# --- Runtime tracking ---
+			"packet_count": 0,
+			"last_seen": None,
+			"iat_window": deque(maxlen=10)
+		})
         self.TCAM_MAX = 1000
+        # VITA parameters
+        self.t_init = 2
+        self.t_max = 32
+        self.t_max_restore = 32
+        self.min_t_max = 10
+
+        self.TCAM_lowerbound = 0.4 * self.TCAM_MAX
+        self.TCAM_upperbound = 0.8 * self.TCAM_MAX
+
+        self.coef_w = 0.75
+        self.B = 2
+        
         
         # --- Evaluation Metrics ---
         self.packet_in_count = 0
@@ -118,35 +128,48 @@ class SimpleSwitch13(app_manager.RyuApp):
 		self.metrics.append(record)
    
     def compute_idle_timeout(self, flow_id):
-		stats = self.flow_stats[flow_id]
+        stats = self.flow_stats[flow_id]
+        now = time.time()
 
-		N_k = stats["packet_count"]
+        npacketIn = stats["npacketIn"]
+        tpacketIn = stats["tpacketIn"]
+        tlastRemoved = stats["tlastRemoved"]
+        tlastDuration = stats["tlastDuration"]
 
-		if len(stats["iat_window"]) == 0:
-		    mean_iat = 1.0
-		else:
-		    mean_iat = sum(stats["iat_window"]) / len(stats["iat_window"])
+        TableOcc = len(self.flow_stats)
 
-		# Approximate TCAM occupancy
-		table_occ = len(self.flow_stats)
-		occ_ratio = min(table_occ / self.TCAM_MAX, 1.0)
+        # --- CASE 1: First packet-in ---
+        if npacketIn == 1:
+            return self.t_init
 
-		# --- Core adaptive equation ---
-		base_timeout = (
-		    self.ALPHA * (math.log(1 + N_k))
-		    + self.BETA * (1.0 / mean_iat)
-		    - self.DELTA * occ_ratio
-		)
+        # --- CASE 2: TableOcc <= lowerbound ---
+        if TableOcc <= self.TCAM_lowerbound:
+            t_max = self.t_max_restore
+            T = min(self.t_init * (2 ** npacketIn), t_max)
+            return int(T)
 
-		latency_guard = self.GAMMA * mean_iat
+        # --- CASE 3: lowerbound < TableOcc <= upperbound ---
+        elif TableOcc <= self.TCAM_upperbound:
 
-		T = max(
-		    self.T_MIN,
-		    min(self.T_MAX, base_timeout),
-		    latency_guard
-		)
+            t_max_dynamic = min(self.t_max * self.coef_w - self.B,
+                            self.min_t_max)
 
-		return int(T)
+            if tlastRemoved is not None and tlastDuration is not None:
+                if (tpacketIn - tlastRemoved) <= tlastDuration:
+                    T = min(
+                    tlastDuration + (tpacketIn - tlastRemoved),
+                    t_max_dynamic
+                )
+                else:
+                    T = tlastDuration
+            else:
+                T = self.t_init
+
+            return int(max(1, T))
+
+        # --- CASE 4: TableOcc > upperbound ---
+        else:
+            return 1
      
         
         
@@ -215,7 +238,23 @@ class SimpleSwitch13(app_manager.RyuApp):
             mod = parser.OFPFlowMod(datapath=datapath, priority=priority,
                                     match=match, instructions=inst, idle_timeout=idle_timeout, hard_timeout=hard_timeout, flags=ofproto.OFPFF_SEND_FLOW_REM)
         datapath.send_msg(mod)
+    @set_ev_cls(ofp_event.EventOFPFlowRemoved, MAIN_DISPATCHER)
+    def flow_removed_handler(self, ev):
+        msg = ev.msg
+        match = msg.match
 
+        in_port = match.get('in_port')
+        eth_src = match.get('eth_src')
+        eth_dst = match.get('eth_dst')
+
+        if in_port and eth_src and eth_dst:
+            key = (eth_src, eth_dst, in_port)
+
+            if key in self.flow_stats:
+                duration = msg.duration_sec + msg.duration_nsec / 1e9
+
+                self.flow_stats[key]["tlastRemoved"] = time.time()
+                self.flow_stats[key]["tlastDuration"] = duration
     @set_ev_cls(ofp_event.EventOFPPacketIn, MAIN_DISPATCHER)
     def _packet_in_handler(self, ev):
     	self.packet_in_count += 1
@@ -247,12 +286,19 @@ class SimpleSwitch13(app_manager.RyuApp):
             return
         now = time.time()
         flow = self.flow_stats[flow_id]
+
+        # --- VITA metrics update ---
+        flow["npacketIn"] += 1
+        flow["tpacketIn"] = now
+
+        # --- Runtime metrics ---
         flow["packet_count"] += 1
         if flow["last_seen"] is not None:
         	iat = now - flow["last_seen"]
         	flow["iat_window"].append(iat)
         	
         flow["last_seen"] = now
+        #self.logger.info("packet in %s %s %s %s", dpid, src, dst, in_port)
 
         # learn a mac address to avoid FLOOD next time.
         self.mac_to_port[dpid][src] = in_port
