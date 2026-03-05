@@ -75,8 +75,9 @@ class SimpleSwitch13(app_manager.RyuApp):
         self.TCAM_upperbound = 0.8 * self.TCAM_MAX
 
         self.coef_w = 0.75
-        self.B = 2
-        
+        self.B = 1 # assumed as it was not mentioned in paper
+        self.high_threshold = 0.85
+        self.low_threshold = 0.55
         
         # --- Evaluation Metrics ---
         self.packet_in_count = 0
@@ -93,17 +94,6 @@ class SimpleSwitch13(app_manager.RyuApp):
         signal.signal(signal.SIGINT, self._signal_handler)
         atexit.register(self._write_metrics)
         
-    @set_ev_cls(ofp_event.EventOFPFlowRemoved, MAIN_DISPATCHER)
-    def flow_removed_handler(self, ev):
-        match = ev.msg.match
-        in_port = match.get('in_port')
-        eth_src = match.get('eth_src')
-        eth_dst = match.get('eth_dst')
-
-        if in_port and eth_src and eth_dst:
-            key = (eth_src, eth_dst, in_port)
-            self.flow_stats.pop(key, None)
-        
     def _signal_handler(self, signum, frame):
         """Handle shutdown signals"""
         self._write_metrics()
@@ -113,6 +103,7 @@ class SimpleSwitch13(app_manager.RyuApp):
 		    for dp in self.datapaths.values():
 		        self._request_stats(dp)
 		    self._collect_metrics()
+		    self._proactive_eviction()
 		    
     def _collect_metrics(self):
 		now = time.time() - self.start_time
@@ -126,7 +117,68 @@ class SimpleSwitch13(app_manager.RyuApp):
 		}
 		self.logger.info(record)
 		self.metrics.append(record)
-   
+		
+	def _proactive_eviction(self):
+        occupancy = len(self.flow_stats)
+
+        if occupancy < self.high_threshold * self.TCAM_MAX:
+            return
+
+        now = time.time()
+        eviction_table = []
+
+        for key, flow in self.flow_stats.items():
+
+            tpacketIn = flow["tpacketIn"]
+            hits = flow["packet_count"]
+
+            if tpacketIn is None:
+                continue
+
+            lifetime = now - tpacketIn
+
+            if lifetime <= 0:
+                continue
+
+            metric = hits / lifetime
+
+            eviction_table.append((metric, key))
+
+        eviction_table.sort(key=lambda x: x[0])  # lowest first
+
+        target = int(self.low_threshold * self.TCAM_MAX)
+
+        while len(self.flow_stats) > target and eviction_table:
+
+            metric, key = eviction_table.pop(0)
+
+            self._delete_flow(key)
+    def _delete_flow(self, key):
+
+        src, dst, in_port = key
+
+        for dp in self.datapaths.values():
+
+            parser = dp.ofproto_parser
+            ofproto = dp.ofproto
+
+            match = parser.OFPMatch(
+                in_port=in_port,
+                eth_src=src,
+                eth_dst=dst
+            )
+
+            mod = parser.OFPFlowMod(
+                datapath=dp,
+                command=ofproto.OFPFC_DELETE,
+                out_port=ofproto.OFPP_ANY,
+                out_group=ofproto.OFPG_ANY,
+                match=match
+            )
+
+            dp.send_msg(mod)
+
+        self.flow_stats.pop(key, None)
     def compute_idle_timeout(self, flow_id):
         stats = self.flow_stats[flow_id]
         now = time.time()
