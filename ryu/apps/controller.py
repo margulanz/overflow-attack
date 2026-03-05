@@ -65,8 +65,10 @@ class SimpleSwitch13(app_manager.RyuApp):
         self.BETA = 5.0 # activity weight
         self.DELTA = 10.0 # congestion penalty
         self.GAMMA = 1.5 # latency safety factor
-
+        self.ETA = 5.0 # periodicity factor
         self.TCAM_MAX = 1000
+        self.THETA = 10.0 # CPU load factor
+        self.cpu_load = 0
         
         # --- Evaluation Metrics ---
         self.packet_in_count = 0
@@ -114,6 +116,7 @@ class SimpleSwitch13(app_manager.RyuApp):
 		    "cpu_percent": self.process.cpu_percent(interval=None),
 		    "memory_mb": self.process.memory_info().rss / (1024 * 1024),
 		}
+		self.cpu_load = self.process.cpu_percent(interval=None)
 		self.logger.info(record)
 		self.metrics.append(record)
    
@@ -126,7 +129,8 @@ class SimpleSwitch13(app_manager.RyuApp):
 		    mean_iat = 1.0
 		else:
 		    mean_iat = sum(stats["iat_window"]) / len(stats["iat_window"])
-
+        periodicity = self.detect_periodicity(flow_id)
+        cpu_norm = self.cpu_load / 100.0
 		# Approximate TCAM occupancy
 		table_occ = len(self.flow_stats)
 		occ_ratio = min(table_occ / self.TCAM_MAX, 1.0)
@@ -135,7 +139,9 @@ class SimpleSwitch13(app_manager.RyuApp):
 		base_timeout = (
 		    self.ALPHA * (math.log(1 + N_k))
 		    + self.BETA * (1.0 / mean_iat)
+		    + self.ETA * periodicity
 		    - self.DELTA * occ_ratio
+		    - self.THETA * cpu_norm
 		)
 
 		latency_guard = self.GAMMA * mean_iat
@@ -215,7 +221,22 @@ class SimpleSwitch13(app_manager.RyuApp):
             mod = parser.OFPFlowMod(datapath=datapath, priority=priority,
                                     match=match, instructions=inst, idle_timeout=idle_timeout, hard_timeout=hard_timeout, flags=ofproto.OFPFF_SEND_FLOW_REM)
         datapath.send_msg(mod)
+    def detect_periodicity(self, flow_id):
+        iats = self.flow_stats[flow_id]["iat_window"]
 
+        if len(iats) < 5:
+            return 0
+
+        mean = sum(iats) / len(iats)
+        variance = sum((x - mean) ** 2 for x in iats) / len(iats)
+        std = math.sqrt(variance)
+
+        cv = std / mean if mean > 0 else 1
+
+        # lower CV → more periodic
+        periodic_score = max(0, 1 - cv)
+
+        return periodic_score
     @set_ev_cls(ofp_event.EventOFPPacketIn, MAIN_DISPATCHER)
     def _packet_in_handler(self, ev):
     	self.packet_in_count += 1
