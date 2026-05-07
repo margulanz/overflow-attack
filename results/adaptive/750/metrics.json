@@ -1,0 +1,946 @@
+[
+  {
+    "cpu_percent": 1.1, 
+    "table_occupancy": 0, 
+    "rejected_flows": 0, 
+    "memory_mb": 38, 
+    "time": 0.9, 
+    "packet_in_count": 0
+  }, 
+  {
+    "cpu_percent": 0.0, 
+    "table_occupancy": 0, 
+    "rejected_flows": 0, 
+    "memory_mb": 38, 
+    "time": 1.42, 
+    "packet_in_count": 0
+  }, 
+  {
+    "cpu_percent": 0.0, 
+    "table_occupancy": 0, 
+    "rejected_flows": 0, 
+    "memory_mb": 38, 
+    "time": 1.92, 
+    "packet_in_count": 0
+  }, 
+  {
+    "cpu_percent": 0.0, 
+    "table_occupancy": 0, 
+    "rejected_flows": 0, 
+    "memory_mb": 38, 
+    "time": 2.48, 
+    "packet_in_count": 0
+  }, 
+  {
+    "cpu_percent": 0.0, 
+    "table_occupancy": 0, 
+    "rejected_flows": 0, 
+    "memory_mb": 38, 
+    "time": 3.39, 
+    "packet_in_count": 0
+  }, 
+  {
+    "cpu_percent": 0.0, 
+    "table_occupancy": 0, 
+    "rejected_flows": 0, 
+    "memory_mb": 38, 
+    "time": 3.9, 
+    "packet_in_count": 0
+  }, 
+  {
+    "cpu_percent": 0.0, 
+    "table_occupancy": 0, 
+    "rejected_flows": 0, 
+    "memory_mb": 38, 
+    "time": 4.78, 
+    "packet_in_count": 0
+  }, 
+  {
+    "cpu_percent": 0.0, 
+    "table_occupancy": 2, 
+    "rejected_flows": 0, 
+    "memory_mb": 38, 
+    "time": 5.28, 
+    "packet_in_count": 2
+  }, 
+  {
+    "cpu_percent": 2.0, 
+    "table_occupancy": 7, 
+    "rejected_flows": 0, 
+    "memory_mb": 38, 
+    "time": 5.78, 
+    "packet_in_count": 7
+  }, 
+  {
+    "cpu_percent": 2.0, 
+    "table_occupancy": 13, 
+    "rejected_flows": 0, 
+    "memory_mb": 38, 
+    "time": 6.28, 
+    "packet_in_count": 14
+  }, 
+  {
+    "cpu_percent": 0.0, 
+    "table_occupancy": 16, 
+    "rejected_flows": 0, 
+    "memory_mb": 38, 
+    "time": 6.78, 
+    "packet_in_count": 22
+  }, 
+  {
+    "cpu_percent": 0.0, 
+    "table_occupancy": 18, 
+    "rejected_flows": 0, 
+    "memory_mb": 38, 
+    "time": 7.28, 
+    "packet_in_count": 27
+  }, 
+  {
+    "cpu_percent": 2.0, 
+    "table_occupancy": 18, 
+    "rejected_flows": 0, 
+    "memory_mb": 38, 
+    "time": 7.78, 
+    "packet_in_count": 30
+  }, 
+  {
+    "cpu_percent": 0.0, 
+    "table_occupancy": 18, 
+    "rejected_flows": 0, 
+    "memory_mb": 38, 
+    "time": 8.28, 
+    "packet_in_count": 30
+  }, 
+  {
+    "cpu_percent": 0.0, 
+    "table_occupancy": 18, 
+    "rejected_flows": 0, 
+    "memory_mb": 38, 
+    "time": 8.79, 
+    "packet_in_count": 30
+  }, 
+  {
+    "cpu_percent": 0.0, 
+    "table_occupancy": 18, 
+    "rejected_flows": 0, 
+    "memory_mb": 38, 
+    "time": 9.29, 
+    "packet_in_count": 30
+  }, 
+  {
+    "cpu_percent": 0.0, 
+    "table_occupancy": 18, 
+    "rejected_flows": 0, 
+    "memory_mb": 38, 
+    "time": 9.79, 
+    "packet_in_count": 30
+  }, 
+  {
+    "cpu_percent": 7.6, 
+    "table_occupancy": 64, 
+    "rejected_flows": 0, 
+    "memory_mb": 39, 
+    "time": 10.31, 
+    "packet_in_count": 106
+  }, 
+  {
+    "cpu_percent": 32.0, 
+    "table_occupancy": 373, 
+    "rejected_flows": 0, 
+    "memory_mb": 39, 
+    "time": 10.82, 
+    "packet_in_count": 513
+  }, 
+  {
+    "cpu_percent": 24.0, 
+    "table_occupancy": 537, 
+    "rejected_flows": 0, 
+    "memory_mb": 40, 
+    "time": 11.32, 
+    "packet_in_count": 769
+  }, 
+  {
+    "cpu_percent": 24.0, 
+    "table_occupancy": 694, 
+    "rejected_flows": 0, 
+    "memory_mb": 40, 
+    "time": 11.82, 
+    "packet_in_count": 1119
+  }, 
+  {
+    "cpu_percent": 17.9, 
+    "table_occupancy": 750, 
+    "rejected_flows": 29, 
+    "memory_mb": 40, 
+    "time": 12.32, 
+    "packet_in_count": 1377
+  }, 
+  {
+    "cpu_percent": 16.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 86, 
+    "memory_mb": 40, 
+    "time": 12.82, 
+    "packet_in_count": 1587
+  }, 
+  {
+    "cpu_percent": 14.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 173, 
+    "memory_mb": 40, 
+    "time": 13.32, 
+    "packet_in_count": 1798
+  }, 
+  {
+    "cpu_percent": 16.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 251, 
+    "memory_mb": 40, 
+    "time": 13.82, 
+    "packet_in_count": 2021
+  }, 
+  {
+    "cpu_percent": 33.9, 
+    "table_occupancy": 750, 
+    "rejected_flows": 468, 
+    "memory_mb": 40, 
+    "time": 14.32, 
+    "packet_in_count": 2654
+  }, 
+  {
+    "cpu_percent": 36.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 664, 
+    "memory_mb": 40, 
+    "time": 14.83, 
+    "packet_in_count": 3288
+  }, 
+  {
+    "cpu_percent": 16.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 745, 
+    "memory_mb": 40, 
+    "time": 15.33, 
+    "packet_in_count": 3553
+  }, 
+  {
+    "cpu_percent": 12.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 789, 
+    "memory_mb": 40, 
+    "time": 15.83, 
+    "packet_in_count": 3682
+  }, 
+  {
+    "cpu_percent": 8.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 826, 
+    "memory_mb": 40, 
+    "time": 16.33, 
+    "packet_in_count": 3797
+  }, 
+  {
+    "cpu_percent": 12.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 882, 
+    "memory_mb": 40, 
+    "time": 16.83, 
+    "packet_in_count": 3956
+  }, 
+  {
+    "cpu_percent": 16.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 952, 
+    "memory_mb": 40, 
+    "time": 17.33, 
+    "packet_in_count": 4203
+  }, 
+  {
+    "cpu_percent": 10.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 1002, 
+    "memory_mb": 40, 
+    "time": 17.83, 
+    "packet_in_count": 4365
+  }, 
+  {
+    "cpu_percent": 9.9, 
+    "table_occupancy": 750, 
+    "rejected_flows": 1051, 
+    "memory_mb": 40, 
+    "time": 18.33, 
+    "packet_in_count": 4502
+  }, 
+  {
+    "cpu_percent": 9.9, 
+    "table_occupancy": 750, 
+    "rejected_flows": 1110, 
+    "memory_mb": 40, 
+    "time": 18.84, 
+    "packet_in_count": 4665
+  }, 
+  {
+    "cpu_percent": 12.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 1177, 
+    "memory_mb": 40, 
+    "time": 19.34, 
+    "packet_in_count": 4859
+  }, 
+  {
+    "cpu_percent": 8.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 1217, 
+    "memory_mb": 40, 
+    "time": 19.84, 
+    "packet_in_count": 4979
+  }, 
+  {
+    "cpu_percent": 11.9, 
+    "table_occupancy": 750, 
+    "rejected_flows": 1266, 
+    "memory_mb": 40, 
+    "time": 20.35, 
+    "packet_in_count": 5124
+  }, 
+  {
+    "cpu_percent": 14.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 1312, 
+    "memory_mb": 40, 
+    "time": 20.85, 
+    "packet_in_count": 5297
+  }, 
+  {
+    "cpu_percent": 10.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 1371, 
+    "memory_mb": 40, 
+    "time": 21.35, 
+    "packet_in_count": 5483
+  }, 
+  {
+    "cpu_percent": 18.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 1441, 
+    "memory_mb": 40, 
+    "time": 21.85, 
+    "packet_in_count": 5701
+  }, 
+  {
+    "cpu_percent": 10.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 1482, 
+    "memory_mb": 40, 
+    "time": 22.35, 
+    "packet_in_count": 5843
+  }, 
+  {
+    "cpu_percent": 12.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 1541, 
+    "memory_mb": 40, 
+    "time": 22.85, 
+    "packet_in_count": 6007
+  }, 
+  {
+    "cpu_percent": 10.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 1579, 
+    "memory_mb": 40, 
+    "time": 23.35, 
+    "packet_in_count": 6165
+  }, 
+  {
+    "cpu_percent": 12.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 1650, 
+    "memory_mb": 40, 
+    "time": 23.85, 
+    "packet_in_count": 6360
+  }, 
+  {
+    "cpu_percent": 11.9, 
+    "table_occupancy": 750, 
+    "rejected_flows": 1723, 
+    "memory_mb": 40, 
+    "time": 24.35, 
+    "packet_in_count": 6539
+  }, 
+  {
+    "cpu_percent": 12.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 1785, 
+    "memory_mb": 40, 
+    "time": 24.85, 
+    "packet_in_count": 6717
+  }, 
+  {
+    "cpu_percent": 16.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 1865, 
+    "memory_mb": 40, 
+    "time": 25.35, 
+    "packet_in_count": 6965
+  }, 
+  {
+    "cpu_percent": 19.8, 
+    "table_occupancy": 750, 
+    "rejected_flows": 1972, 
+    "memory_mb": 40, 
+    "time": 25.86, 
+    "packet_in_count": 7304
+  }, 
+  {
+    "cpu_percent": 16.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 2043, 
+    "memory_mb": 40, 
+    "time": 26.36, 
+    "packet_in_count": 7541
+  }, 
+  {
+    "cpu_percent": 22.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 2140, 
+    "memory_mb": 40, 
+    "time": 26.86, 
+    "packet_in_count": 7854
+  }, 
+  {
+    "cpu_percent": 13.8, 
+    "table_occupancy": 750, 
+    "rejected_flows": 2205, 
+    "memory_mb": 40, 
+    "time": 27.37, 
+    "packet_in_count": 8062
+  }, 
+  {
+    "cpu_percent": 12.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 2274, 
+    "memory_mb": 40, 
+    "time": 27.87, 
+    "packet_in_count": 8252
+  }, 
+  {
+    "cpu_percent": 16.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 2337, 
+    "memory_mb": 40, 
+    "time": 28.37, 
+    "packet_in_count": 8497
+  }, 
+  {
+    "cpu_percent": 14.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 2399, 
+    "memory_mb": 40, 
+    "time": 28.87, 
+    "packet_in_count": 8696
+  }, 
+  {
+    "cpu_percent": 8.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 2434, 
+    "memory_mb": 40, 
+    "time": 29.37, 
+    "packet_in_count": 8830
+  }, 
+  {
+    "cpu_percent": 24.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 2536, 
+    "memory_mb": 40, 
+    "time": 29.87, 
+    "packet_in_count": 9160
+  }, 
+  {
+    "cpu_percent": 13.9, 
+    "table_occupancy": 750, 
+    "rejected_flows": 2619, 
+    "memory_mb": 40, 
+    "time": 30.37, 
+    "packet_in_count": 9397
+  }, 
+  {
+    "cpu_percent": 20.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 2737, 
+    "memory_mb": 40, 
+    "time": 30.87, 
+    "packet_in_count": 9749
+  }, 
+  {
+    "cpu_percent": 17.9, 
+    "table_occupancy": 750, 
+    "rejected_flows": 2838, 
+    "memory_mb": 40, 
+    "time": 31.38, 
+    "packet_in_count": 10022
+  }, 
+  {
+    "cpu_percent": 11.9, 
+    "table_occupancy": 750, 
+    "rejected_flows": 2895, 
+    "memory_mb": 40, 
+    "time": 31.88, 
+    "packet_in_count": 10187
+  }, 
+  {
+    "cpu_percent": 8.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 2942, 
+    "memory_mb": 40, 
+    "time": 32.38, 
+    "packet_in_count": 10319
+  }, 
+  {
+    "cpu_percent": 12.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 2990, 
+    "memory_mb": 40, 
+    "time": 32.89, 
+    "packet_in_count": 10451
+  }, 
+  {
+    "cpu_percent": 8.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 3031, 
+    "memory_mb": 40, 
+    "time": 33.39, 
+    "packet_in_count": 10584
+  }, 
+  {
+    "cpu_percent": 10.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 3094, 
+    "memory_mb": 40, 
+    "time": 33.89, 
+    "packet_in_count": 10748
+  }, 
+  {
+    "cpu_percent": 16.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 3164, 
+    "memory_mb": 40, 
+    "time": 34.39, 
+    "packet_in_count": 10969
+  }, 
+  {
+    "cpu_percent": 16.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 3250, 
+    "memory_mb": 40, 
+    "time": 34.89, 
+    "packet_in_count": 11216
+  }, 
+  {
+    "cpu_percent": 18.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 3309, 
+    "memory_mb": 40, 
+    "time": 35.39, 
+    "packet_in_count": 11446
+  }, 
+  {
+    "cpu_percent": 6.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 3345, 
+    "memory_mb": 40, 
+    "time": 35.89, 
+    "packet_in_count": 11566
+  }, 
+  {
+    "cpu_percent": 8.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 3379, 
+    "memory_mb": 40, 
+    "time": 36.39, 
+    "packet_in_count": 11659
+  }, 
+  {
+    "cpu_percent": 12.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 3425, 
+    "memory_mb": 40, 
+    "time": 36.89, 
+    "packet_in_count": 11784
+  }, 
+  {
+    "cpu_percent": 6.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 3464, 
+    "memory_mb": 40, 
+    "time": 37.39, 
+    "packet_in_count": 11898
+  }, 
+  {
+    "cpu_percent": 12.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 3506, 
+    "memory_mb": 40, 
+    "time": 37.89, 
+    "packet_in_count": 12042
+  }, 
+  {
+    "cpu_percent": 12.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 3554, 
+    "memory_mb": 40, 
+    "time": 38.39, 
+    "packet_in_count": 12202
+  }, 
+  {
+    "cpu_percent": 10.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 3609, 
+    "memory_mb": 40, 
+    "time": 38.9, 
+    "packet_in_count": 12374
+  }, 
+  {
+    "cpu_percent": 12.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 3665, 
+    "memory_mb": 40, 
+    "time": 39.4, 
+    "packet_in_count": 12536
+  }, 
+  {
+    "cpu_percent": 8.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 3714, 
+    "memory_mb": 40, 
+    "time": 39.9, 
+    "packet_in_count": 12667
+  }, 
+  {
+    "cpu_percent": 11.9, 
+    "table_occupancy": 750, 
+    "rejected_flows": 3752, 
+    "memory_mb": 40, 
+    "time": 40.4, 
+    "packet_in_count": 12804
+  }, 
+  {
+    "cpu_percent": 14.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 3812, 
+    "memory_mb": 40, 
+    "time": 40.9, 
+    "packet_in_count": 13008
+  }, 
+  {
+    "cpu_percent": 17.9, 
+    "table_occupancy": 750, 
+    "rejected_flows": 3896, 
+    "memory_mb": 40, 
+    "time": 41.4, 
+    "packet_in_count": 13284
+  }, 
+  {
+    "cpu_percent": 12.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 3978, 
+    "memory_mb": 40, 
+    "time": 41.91, 
+    "packet_in_count": 13507
+  }, 
+  {
+    "cpu_percent": 20.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 4087, 
+    "memory_mb": 40, 
+    "time": 42.41, 
+    "packet_in_count": 13813
+  }, 
+  {
+    "cpu_percent": 12.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 4141, 
+    "memory_mb": 40, 
+    "time": 42.91, 
+    "packet_in_count": 14022
+  }, 
+  {
+    "cpu_percent": 19.9, 
+    "table_occupancy": 750, 
+    "rejected_flows": 4233, 
+    "memory_mb": 40, 
+    "time": 43.41, 
+    "packet_in_count": 14337
+  }, 
+  {
+    "cpu_percent": 14.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 4299, 
+    "memory_mb": 40, 
+    "time": 43.91, 
+    "packet_in_count": 14543
+  }, 
+  {
+    "cpu_percent": 14.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 4362, 
+    "memory_mb": 40, 
+    "time": 44.41, 
+    "packet_in_count": 14757
+  }, 
+  {
+    "cpu_percent": 11.9, 
+    "table_occupancy": 750, 
+    "rejected_flows": 4409, 
+    "memory_mb": 40, 
+    "time": 44.92, 
+    "packet_in_count": 14917
+  }, 
+  {
+    "cpu_percent": 14.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 4467, 
+    "memory_mb": 40, 
+    "time": 45.42, 
+    "packet_in_count": 15126
+  }, 
+  {
+    "cpu_percent": 13.9, 
+    "table_occupancy": 750, 
+    "rejected_flows": 4523, 
+    "memory_mb": 40, 
+    "time": 45.92, 
+    "packet_in_count": 15307
+  }, 
+  {
+    "cpu_percent": 16.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 4604, 
+    "memory_mb": 40, 
+    "time": 46.42, 
+    "packet_in_count": 15546
+  }, 
+  {
+    "cpu_percent": 16.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 4673, 
+    "memory_mb": 40, 
+    "time": 46.92, 
+    "packet_in_count": 15776
+  }, 
+  {
+    "cpu_percent": 13.9, 
+    "table_occupancy": 750, 
+    "rejected_flows": 4740, 
+    "memory_mb": 40, 
+    "time": 47.42, 
+    "packet_in_count": 15982
+  }, 
+  {
+    "cpu_percent": 22.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 4852, 
+    "memory_mb": 40, 
+    "time": 47.92, 
+    "packet_in_count": 16335
+  }, 
+  {
+    "cpu_percent": 18.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 4938, 
+    "memory_mb": 40, 
+    "time": 48.43, 
+    "packet_in_count": 16611
+  }, 
+  {
+    "cpu_percent": 18.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 5038, 
+    "memory_mb": 40, 
+    "time": 48.93, 
+    "packet_in_count": 16910
+  }, 
+  {
+    "cpu_percent": 22.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 5146, 
+    "memory_mb": 40, 
+    "time": 49.43, 
+    "packet_in_count": 17261
+  }, 
+  {
+    "cpu_percent": 19.9, 
+    "table_occupancy": 750, 
+    "rejected_flows": 5250, 
+    "memory_mb": 40, 
+    "time": 49.93, 
+    "packet_in_count": 17575
+  }, 
+  {
+    "cpu_percent": 16.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 5316, 
+    "memory_mb": 40, 
+    "time": 50.43, 
+    "packet_in_count": 17788
+  }, 
+  {
+    "cpu_percent": 16.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 5401, 
+    "memory_mb": 40, 
+    "time": 50.93, 
+    "packet_in_count": 18014
+  }, 
+  {
+    "cpu_percent": 15.9, 
+    "table_occupancy": 750, 
+    "rejected_flows": 5500, 
+    "memory_mb": 40, 
+    "time": 51.43, 
+    "packet_in_count": 18268
+  }, 
+  {
+    "cpu_percent": 17.9, 
+    "table_occupancy": 750, 
+    "rejected_flows": 5630, 
+    "memory_mb": 40, 
+    "time": 51.94, 
+    "packet_in_count": 18557
+  }, 
+  {
+    "cpu_percent": 17.9, 
+    "table_occupancy": 750, 
+    "rejected_flows": 5749, 
+    "memory_mb": 40, 
+    "time": 52.44, 
+    "packet_in_count": 18851
+  }, 
+  {
+    "cpu_percent": 10.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 5806, 
+    "memory_mb": 40, 
+    "time": 52.94, 
+    "packet_in_count": 18990
+  }, 
+  {
+    "cpu_percent": 13.8, 
+    "table_occupancy": 750, 
+    "rejected_flows": 5911, 
+    "memory_mb": 40, 
+    "time": 53.45, 
+    "packet_in_count": 19218
+  }, 
+  {
+    "cpu_percent": 9.9, 
+    "table_occupancy": 750, 
+    "rejected_flows": 5971, 
+    "memory_mb": 40, 
+    "time": 53.95, 
+    "packet_in_count": 19350
+  }, 
+  {
+    "cpu_percent": 12.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 6036, 
+    "memory_mb": 40, 
+    "time": 54.45, 
+    "packet_in_count": 19509
+  }, 
+  {
+    "cpu_percent": 18.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 6201, 
+    "memory_mb": 40, 
+    "time": 54.95, 
+    "packet_in_count": 19829
+  }, 
+  {
+    "cpu_percent": 22.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 6398, 
+    "memory_mb": 40, 
+    "time": 55.45, 
+    "packet_in_count": 20203
+  }, 
+  {
+    "cpu_percent": 15.9, 
+    "table_occupancy": 750, 
+    "rejected_flows": 6527, 
+    "memory_mb": 40, 
+    "time": 55.96, 
+    "packet_in_count": 20468
+  }, 
+  {
+    "cpu_percent": 12.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 6618, 
+    "memory_mb": 40, 
+    "time": 56.46, 
+    "packet_in_count": 20645
+  }, 
+  {
+    "cpu_percent": 12.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 6744, 
+    "memory_mb": 40, 
+    "time": 56.96, 
+    "packet_in_count": 20865
+  }, 
+  {
+    "cpu_percent": 32.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 7051, 
+    "memory_mb": 40, 
+    "time": 57.46, 
+    "packet_in_count": 21480
+  }, 
+  {
+    "cpu_percent": 21.9, 
+    "table_occupancy": 750, 
+    "rejected_flows": 7255, 
+    "memory_mb": 40, 
+    "time": 57.96, 
+    "packet_in_count": 21853
+  }, 
+  {
+    "cpu_percent": 18.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 7395, 
+    "memory_mb": 40, 
+    "time": 58.46, 
+    "packet_in_count": 22128
+  }, 
+  {
+    "cpu_percent": 18.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 7560, 
+    "memory_mb": 40, 
+    "time": 58.96, 
+    "packet_in_count": 22447
+  }, 
+  {
+    "cpu_percent": 16.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 7666, 
+    "memory_mb": 40, 
+    "time": 59.46, 
+    "packet_in_count": 22686
+  }, 
+  {
+    "cpu_percent": 18.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 7789, 
+    "memory_mb": 40, 
+    "time": 59.96, 
+    "packet_in_count": 22926
+  }, 
+  {
+    "cpu_percent": 12.0, 
+    "table_occupancy": 750, 
+    "rejected_flows": 7874, 
+    "memory_mb": 40, 
+    "time": 60.46, 
+    "packet_in_count": 23097
+  }
+]

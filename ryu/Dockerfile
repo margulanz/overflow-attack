@@ -25,4 +25,5 @@ ENV PYTHONPATH=/root:$PYTHONPATH
 ENV MODE=adaptive
 
 ENV FIXED_TIMEOUT=10
-CMD ["ryu-manager", "apps.vita-controller"]
+#CMD ["ryu-manager", "apps.vita-controller"]
+CMD ["ryu-manager", "apps.controller"]

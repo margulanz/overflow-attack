@@ -1,0 +1,602 @@
+[
+  {
+    "params": {
+      "T_MIN": 4.5,
+      "T_MAX": 5.0,
+      "ALPHA": 9.0,
+      "BETA": 8.5,
+      "DELTA": 5.0,
+      "GAMMA": 0.7,
+      "ETA": 19.0,
+      "THETA": 8.0
+    },
+    "summary": {
+      "avg_cpu_percent": 10.69666666666667,
+      "total_packet_in_flows": 16337,
+      "total_rejected_flows": 4748,
+      "avg_table_occupancy_percent": 82.13333333333334,
+      "avg_memory_mb": 39
+    },
+    "score": 102.74333333333334
+  },
+  {
+    "params": {
+      "T_MIN": 3.5,
+      "T_MAX": 20.0,
+      "ALPHA": 7.0,
+      "BETA": 6.0,
+      "DELTA": 5.0,
+      "GAMMA": 0.3,
+      "ETA": 20.0,
+      "THETA": 9.0
+    },
+    "summary": {
+      "avg_cpu_percent": 10.911666666666665,
+      "total_packet_in_flows": 18873,
+      "total_rejected_flows": 5732,
+      "avg_table_occupancy_percent": 82.13333333333334,
+      "avg_memory_mb": 39
+    },
+    "score": 109.94833333333334
+  },
+  {
+    "params": {
+      "T_MIN": 3.5,
+      "T_MAX": 40.0,
+      "ALPHA": 9.0,
+      "BETA": 9.5,
+      "DELTA": 5.0,
+      "GAMMA": 0.7,
+      "ETA": 18.0,
+      "THETA": 4.0
+    },
+    "summary": {
+      "avg_cpu_percent": 11.242500000000001,
+      "total_packet_in_flows": 18898,
+      "total_rejected_flows": 5801,
+      "avg_table_occupancy_percent": 82.26666666666667,
+      "avg_memory_mb": 39
+    },
+    "score": 111.40083333333334
+  },
+  {
+    "params": {
+      "T_MIN": 3.0,
+      "T_MAX": 15.0,
+      "ALPHA": 9.0,
+      "BETA": 8.0,
+      "DELTA": 5.0,
+      "GAMMA": 0.5,
+      "ETA": 20.0,
+      "THETA": 7.0
+    },
+    "summary": {
+      "avg_cpu_percent": 11.095833333333335,
+      "total_packet_in_flows": 19255,
+      "total_rejected_flows": 5973,
+      "avg_table_occupancy_percent": 82.4,
+      "avg_memory_mb": 39
+    },
+    "score": 112.10750000000002
+  },
+  {
+    "params": {
+      "T_MIN": 1.0,
+      "T_MAX": 50.0,
+      "ALPHA": 9.0,
+      "BETA": 9.5,
+      "DELTA": 15.0,
+      "GAMMA": 0.8,
+      "ETA": 18.0,
+      "THETA": 8.0
+    },
+    "summary": {
+      "avg_cpu_percent": 11.205833333333333,
+      "total_packet_in_flows": 19377,
+      "total_rejected_flows": 6006,
+      "avg_table_occupancy_percent": 82.26666666666667,
+      "avg_memory_mb": 39
+    },
+    "score": 112.6575
+  },
+  {
+    "params": {
+      "T_MIN": 2.0,
+      "T_MAX": 15.0,
+      "ALPHA": 7.5,
+      "BETA": 6.0,
+      "DELTA": 10.0,
+      "GAMMA": 0.5,
+      "ETA": 20.0,
+      "THETA": 7.0
+    },
+    "summary": {
+      "avg_cpu_percent": 12.97666666666667,
+      "total_packet_in_flows": 21710,
+      "total_rejected_flows": 6535,
+      "avg_table_occupancy_percent": 82.13333333333334,
+      "avg_memory_mb": 39
+    },
+    "score": 121.49666666666667
+  },
+  {
+    "params": {
+      "T_MIN": 2.5,
+      "T_MAX": 20.0,
+      "ALPHA": 9.5,
+      "BETA": 9.0,
+      "DELTA": 5.0,
+      "GAMMA": 0.7,
+      "ETA": 19.0,
+      "THETA": 5.0
+    },
+    "summary": {
+      "avg_cpu_percent": 12.995000000000001,
+      "total_packet_in_flows": 21611,
+      "total_rejected_flows": 6545,
+      "avg_table_occupancy_percent": 82.26666666666667,
+      "avg_memory_mb": 39
+    },
+    "score": 121.61833333333334
+  },
+  {
+    "params": {
+      "T_MIN": 5.0,
+      "T_MAX": 5.0,
+      "ALPHA": 9.0,
+      "BETA": 9.0,
+      "DELTA": 5.0,
+      "GAMMA": 0.8,
+      "ETA": 16.0,
+      "THETA": 7.0
+    },
+    "summary": {
+      "avg_cpu_percent": 12.965833333333334,
+      "total_packet_in_flows": 21632,
+      "total_rejected_flows": 6604,
+      "avg_table_occupancy_percent": 82.26666666666667,
+      "avg_memory_mb": 39
+    },
+    "score": 121.92416666666668
+  },
+  {
+    "params": {
+      "T_MIN": 3.5,
+      "T_MAX": 20.0,
+      "ALPHA": 7.0,
+      "BETA": 8.0,
+      "DELTA": 10.0,
+      "GAMMA": 0.6,
+      "ETA": 19.0,
+      "THETA": 5.0
+    },
+    "summary": {
+      "avg_cpu_percent": 12.65416666666667,
+      "total_packet_in_flows": 21664,
+      "total_rejected_flows": 6640,
+      "avg_table_occupancy_percent": 82.26666666666667,
+      "avg_memory_mb": 40
+    },
+    "score": 122.22916666666669
+  },
+  {
+    "params": {
+      "T_MIN": 4.0,
+      "T_MAX": 50.0,
+      "ALPHA": 8.0,
+      "BETA": 10.0,
+      "DELTA": 15.0,
+      "GAMMA": 0.9,
+      "ETA": 19.0,
+      "THETA": 4.0
+    },
+    "summary": {
+      "avg_cpu_percent": 13.05916666666667,
+      "total_packet_in_flows": 21906,
+      "total_rejected_flows": 6819,
+      "avg_table_occupancy_percent": 82.66666666666667,
+      "avg_memory_mb": 39
+    },
+    "score": 123.63750000000002
+  },
+  {
+    "params": {
+      "T_MIN": 3.0,
+      "T_MAX": 30.0,
+      "ALPHA": 8.0,
+      "BETA": 6.0,
+      "DELTA": 5.0,
+      "GAMMA": 0.4,
+      "ETA": 18.0,
+      "THETA": 9.0
+    },
+    "summary": {
+      "avg_cpu_percent": 13.207500000000001,
+      "total_packet_in_flows": 21667,
+      "total_rejected_flows": 6638,
+      "avg_table_occupancy_percent": 82.26666666666667,
+      "avg_memory_mb": 40
+    },
+    "score": 123.87583333333333
+  },
+  {
+    "params": {
+      "T_MIN": 1.5,
+      "T_MAX": 20.0,
+      "ALPHA": 8.5,
+      "BETA": 8.0,
+      "DELTA": 25.0,
+      "GAMMA": 0.2,
+      "ETA": 20.0,
+      "THETA": 5.0
+    },
+    "summary": {
+      "avg_cpu_percent": 12.989166666666673,
+      "total_packet_in_flows": 22285,
+      "total_rejected_flows": 6882,
+      "avg_table_occupancy_percent": 82.26666666666667,
+      "avg_memory_mb": 40
+    },
+    "score": 124.84750000000003
+  },
+  {
+    "params": {
+      "T_MIN": 3.0,
+      "T_MAX": 5.0,
+      "ALPHA": 10.0,
+      "BETA": 7.0,
+      "DELTA": 15.0,
+      "GAMMA": 0.4,
+      "ETA": 20.0,
+      "THETA": 8.0
+    },
+    "summary": {
+      "avg_cpu_percent": 12.888333333333334,
+      "total_packet_in_flows": 22534,
+      "total_rejected_flows": 7192,
+      "avg_table_occupancy_percent": 82.4,
+      "avg_memory_mb": 39
+    },
+    "score": 125.61166666666668
+  },
+  {
+    "params": {
+      "T_MIN": 3.5,
+      "T_MAX": 50.0,
+      "ALPHA": 7.5,
+      "BETA": 10.0,
+      "DELTA": 20.0,
+      "GAMMA": 0.8,
+      "ETA": 15.0,
+      "THETA": 4.0
+    },
+    "summary": {
+      "avg_cpu_percent": 13.148333333333335,
+      "total_packet_in_flows": 22492,
+      "total_rejected_flows": 7396,
+      "avg_table_occupancy_percent": 82.26666666666667,
+      "avg_memory_mb": 40
+    },
+    "score": 128.75166666666667
+  },
+  {
+    "params": {
+      "T_MIN": 0.5,
+      "T_MAX": 20.0,
+      "ALPHA": 6.5,
+      "BETA": 7.5,
+      "DELTA": 30.0,
+      "GAMMA": 2.0,
+      "ETA": 6.0,
+      "THETA": 13.0
+    },
+    "summary": {
+      "avg_cpu_percent": 12.930833333333343,
+      "total_packet_in_flows": 22770,
+      "total_rejected_flows": 8055,
+      "avg_table_occupancy_percent": 82.4,
+      "avg_memory_mb": 39
+    },
+    "score": 131.49250000000004
+  },
+  {
+    "params": {
+      "T_MIN": 0.5,
+      "T_MAX": 50.0,
+      "ALPHA": 3.0,
+      "BETA": 3.0,
+      "DELTA": 15.0,
+      "GAMMA": 3.8,
+      "ETA": 19.0,
+      "THETA": 25.0
+    },
+    "summary": {
+      "avg_cpu_percent": 14.07983193277312,
+      "total_packet_in_flows": 24244,
+      "total_rejected_flows": 7564,
+      "avg_table_occupancy_percent": 82.13333333333334,
+      "avg_memory_mb": 39
+    },
+    "score": 131.66616246498603
+  },
+  {
+    "params": {
+      "T_MIN": 1.0,
+      "T_MAX": 35.0,
+      "ALPHA": 9.5,
+      "BETA": 5.0,
+      "DELTA": 5.0,
+      "GAMMA": 1.3,
+      "ETA": 12.0,
+      "THETA": 26.0
+    },
+    "summary": {
+      "avg_cpu_percent": 13.960000000000003,
+      "total_packet_in_flows": 24409,
+      "total_rejected_flows": 7538,
+      "avg_table_occupancy_percent": 82.26666666666667,
+      "avg_memory_mb": 40
+    },
+    "score": 132.13333333333333
+  },
+  {
+    "params": {
+      "T_MIN": 3.5,
+      "T_MAX": 15.0,
+      "ALPHA": 10.0,
+      "BETA": 9.0,
+      "DELTA": 5.0,
+      "GAMMA": 0.6,
+      "ETA": 19.0,
+      "THETA": 6.0
+    },
+    "summary": {
+      "avg_cpu_percent": 13.374166666666671,
+      "total_packet_in_flows": 23004,
+      "total_rejected_flows": 8012,
+      "avg_table_occupancy_percent": 82.13333333333334,
+      "avg_memory_mb": 39
+    },
+    "score": 132.53583333333336
+  },
+  {
+    "params": {
+      "T_MIN": 2.0,
+      "T_MAX": 5.0,
+      "ALPHA": 9.5,
+      "BETA": 9.5,
+      "DELTA": 10.0,
+      "GAMMA": 0.6,
+      "ETA": 16.0,
+      "THETA": 4.0
+    },
+    "summary": {
+      "avg_cpu_percent": 14.22416666666667,
+      "total_packet_in_flows": 24934,
+      "total_rejected_flows": 7730,
+      "avg_table_occupancy_percent": 82.26666666666667,
+      "avg_memory_mb": 39
+    },
+    "score": 133.20583333333335
+  },
+  {
+    "params": {
+      "T_MIN": 4.5,
+      "T_MAX": 30.0,
+      "ALPHA": 9.5,
+      "BETA": 3.0,
+      "DELTA": 65.0,
+      "GAMMA": 1.1,
+      "ETA": 14.0,
+      "THETA": 11.0
+    },
+    "summary": {
+      "avg_cpu_percent": 2.980773480662986,
+      "total_packet_in_flows": 35084,
+      "total_rejected_flows": 13077,
+      "avg_table_occupancy_percent": 24.533333333333335,
+      "avg_memory_mb": 38
+    },
+    "score": 134.12232044198896
+  },
+  {
+    "params": {
+      "T_MIN": 2.0,
+      "T_MAX": 50.0,
+      "ALPHA": 10.0,
+      "BETA": 10.0,
+      "DELTA": 5.0,
+      "GAMMA": 0.6,
+      "ETA": 18.0,
+      "THETA": 5.0
+    },
+    "summary": {
+      "avg_cpu_percent": 14.005833333333339,
+      "total_packet_in_flows": 25157,
+      "total_rejected_flows": 8227,
+      "avg_table_occupancy_percent": 82.4,
+      "avg_memory_mb": 39
+    },
+    "score": 135.86416666666668
+  },
+  {
+    "params": {
+      "T_MIN": 4.0,
+      "T_MAX": 5.0,
+      "ALPHA": 10.0,
+      "BETA": 5.5,
+      "DELTA": 10.0,
+      "GAMMA": 0.1,
+      "ETA": 19.0,
+      "THETA": 10.0
+    },
+    "summary": {
+      "avg_cpu_percent": 14.211764705882356,
+      "total_packet_in_flows": 24950,
+      "total_rejected_flows": 8089,
+      "avg_table_occupancy_percent": 82.13333333333334,
+      "avg_memory_mb": 40
+    },
+    "score": 136.56196078431373
+  },
+  {
+    "params": {
+      "T_MIN": 5.0,
+      "T_MAX": 5.0,
+      "ALPHA": 9.0,
+      "BETA": 9.0,
+      "DELTA": 25.0,
+      "GAMMA": 0.9,
+      "ETA": 20.0,
+      "THETA": 6.0
+    },
+    "summary": {
+      "avg_cpu_percent": 13.960000000000004,
+      "total_packet_in_flows": 25528,
+      "total_rejected_flows": 8382,
+      "avg_table_occupancy_percent": 82.4,
+      "avg_memory_mb": 39
+    },
+    "score": 136.76000000000002
+  },
+  {
+    "params": {
+      "T_MIN": 2.5,
+      "T_MAX": 10.0,
+      "ALPHA": 9.0,
+      "BETA": 7.5,
+      "DELTA": 5.0,
+      "GAMMA": 0.5,
+      "ETA": 16.0,
+      "THETA": 5.0
+    },
+    "summary": {
+      "avg_cpu_percent": 13.858333333333336,
+      "total_packet_in_flows": 25407,
+      "total_rejected_flows": 8454,
+      "avg_table_occupancy_percent": 82.4,
+      "avg_memory_mb": 39
+    },
+    "score": 136.935
+  },
+  {
+    "params": {
+      "T_MIN": 4.0,
+      "T_MAX": 25.0,
+      "ALPHA": 9.5,
+      "BETA": 8.5,
+      "DELTA": 10.0,
+      "GAMMA": 0.4,
+      "ETA": 20.0,
+      "THETA": 3.0
+    },
+    "summary": {
+      "avg_cpu_percent": 14.401666666666669,
+      "total_packet_in_flows": 25174,
+      "total_rejected_flows": 8402,
+      "avg_table_occupancy_percent": 82.26666666666667,
+      "avg_memory_mb": 39
+    },
+    "score": 138.21833333333333
+  },
+  {
+    "params": {
+      "T_MIN": 3.5,
+      "T_MAX": 5.0,
+      "ALPHA": 9.5,
+      "BETA": 9.0,
+      "DELTA": 10.0,
+      "GAMMA": 0.7,
+      "ETA": 20.0,
+      "THETA": 6.0
+    },
+    "summary": {
+      "avg_cpu_percent": 15.245000000000005,
+      "total_packet_in_flows": 27184,
+      "total_rejected_flows": 8431,
+      "avg_table_occupancy_percent": 82.4,
+      "avg_memory_mb": 40
+    },
+    "score": 141.94166666666666
+  },
+  {
+    "params": {
+      "T_MIN": 2.0,
+      "T_MAX": 10.0,
+      "ALPHA": 6.5,
+      "BETA": 7.0,
+      "DELTA": 10.0,
+      "GAMMA": 0.9,
+      "ETA": 20.0,
+      "THETA": 10.0
+    },
+    "summary": {
+      "avg_cpu_percent": 14.412500000000003,
+      "total_packet_in_flows": 26129,
+      "total_rejected_flows": 8905,
+      "avg_table_occupancy_percent": 82.26666666666667,
+      "avg_memory_mb": 40
+    },
+    "score": 142.60416666666669
+  },
+  {
+    "params": {
+      "T_MIN": 4.0,
+      "T_MAX": 50.0,
+      "ALPHA": 8.5,
+      "BETA": 9.5,
+      "DELTA": 5.0,
+      "GAMMA": 0.8,
+      "ETA": 19.0,
+      "THETA": 6.0
+    },
+    "summary": {
+      "avg_cpu_percent": 15.28655462184875,
+      "total_packet_in_flows": 27602,
+      "total_rejected_flows": 8886,
+      "avg_table_occupancy_percent": 82.0,
+      "avg_memory_mb": 40
+    },
+    "score": 145.09966386554623
+  },
+  {
+    "params": {
+      "T_MIN": 5.0,
+      "T_MAX": 15.0,
+      "ALPHA": 1.0,
+      "BETA": 3.0,
+      "DELTA": 10.0,
+      "GAMMA": 1.6,
+      "ETA": 9.0,
+      "THETA": 3.0
+    },
+    "summary": {
+      "avg_cpu_percent": 13.713333333333335,
+      "total_packet_in_flows": 24905,
+      "total_rejected_flows": 10032,
+      "avg_table_occupancy_percent": 82.13333333333334,
+      "avg_memory_mb": 39
+    },
+    "score": 147.01999999999998
+  },
+  {
+    "params": {
+      "T_MIN": 2.5,
+      "T_MAX": 10.0,
+      "ALPHA": 9.0,
+      "BETA": 6.5,
+      "DELTA": 5.0,
+      "GAMMA": 0.7,
+      "ETA": 19.0,
+      "THETA": 7.0
+    },
+    "summary": {
+      "avg_cpu_percent": 14.741666666666672,
+      "total_packet_in_flows": 26493,
+      "total_rejected_flows": 9726,
+      "avg_table_occupancy_percent": 82.53333333333333,
+      "avg_memory_mb": 39
+    },
+    "score": 148.06500000000003
+  }
+]

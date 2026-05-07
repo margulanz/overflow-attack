@@ -20,6 +20,7 @@ import os
 import psutil
 import signal
 import atexit
+import errno
 from oslo_config import cfg
 from collections import defaultdict, deque
 from ryu.base import app_manager
@@ -36,6 +37,14 @@ import os
 MODE = os.environ.get('MODE', 'adaptive')
 FIXED_TIMEOUT = int(os.environ.get('FIXED_TIMEOUT', '5'))
 
+T_MIN = float(os.environ.get('T_MIN', 2))
+T_MAX = float(os.environ.get('T_MAX', 60))
+ALPHA = float(os.environ.get('ALPHA', 15))
+BETA = float(os.environ.get('BETA', 10))
+DELTA = float(os.environ.get('DELTA', 5))
+GAMMA = float(os.environ.get('GAMMA', 3.4))
+ETA = float(os.environ.get('ETA', 5))
+THETA = float(os.environ.get('THETA', 100))
 
 class SimpleSwitch13(app_manager.RyuApp):
     OFP_VERSIONS = [ofproto_v1_3.OFP_VERSION]
@@ -57,17 +66,18 @@ class SimpleSwitch13(app_manager.RyuApp):
             "last_seen": None,
             "iat_window": deque(maxlen=10),  # inter-arrival samples
         })
-        
+        self.TCAM_MAX = 750
         # --- Parameters (thesis-controlled) ---
-        self.T_MIN = 1
-        self.T_MAX = 60
-        self.ALPHA = 2.0 # packet count weight
-        self.BETA = 5.0 # activity weight
-        self.DELTA = 10.0 # congestion penalty
-        self.GAMMA = 1.5 # latency safety factor
-        self.ETA = 5.0 # periodicity factor
-        self.TCAM_MAX = 1000
-        self.THETA = 10.0 # CPU load factor
+        self.T_MIN = T_MIN
+        self.T_MAX = T_MAX
+        self.ALPHA = ALPHA # packet count weight
+        self.BETA = BETA # activity weight
+        self.DELTA = DELTA # congestion penalty
+        self.GAMMA = GAMMA # latency safety factor
+        self.ETA = ETA # periodicity factor
+        self.THETA = THETA # CPU load factor
+        
+        
         self.cpu_load = 0
         
         # --- Evaluation Metrics ---
@@ -129,12 +139,19 @@ class SimpleSwitch13(app_manager.RyuApp):
 		    mean_iat = 1.0
 		else:
 		    mean_iat = sum(stats["iat_window"]) / len(stats["iat_window"])
-        periodicity = self.detect_periodicity(flow_id)
-        cpu_norm = self.cpu_load / 100.0
+		    
+		periodicity = self.detect_periodicity(flow_id)
+		cpu_norm = self.cpu_load / 100.0
 		# Approximate TCAM occupancy
 		table_occ = len(self.flow_stats)
 		occ_ratio = min(table_occ / self.TCAM_MAX, 1.0)
-
+		if occ_ratio > 0.9:
+		    return self.T_MIN
+		    
+		if occ_ratio > 0.55:
+		    effective_t_max = max(self.T_MIN, self.T_MAX * (1.0 - occ_ratio))
+		else:
+		    effective_t_max = self.T_MAX
 		# --- Core adaptive equation ---
 		base_timeout = (
 		    self.ALPHA * (math.log(1 + N_k))
@@ -148,10 +165,10 @@ class SimpleSwitch13(app_manager.RyuApp):
 
 		T = max(
 		    self.T_MIN,
-		    min(self.T_MAX, base_timeout),
+		    min(effective_t_max, base_timeout),
 		    latency_guard
 		)
-
+		self.logger.info(T)
 		return int(T)
      
         
@@ -199,14 +216,39 @@ class SimpleSwitch13(app_manager.RyuApp):
         if not self.metrics:
 		    return
         
-        with open("/results/metrics.json", "w") as f:
+        file_name = "/results/" + self.mode + "/" + str(self.TCAM_MAX) + "/"
+        try:
+            os.makedirs(file_name)
+        except OSError as e:
+            if e.errno != errno.EEXIST:
+                raise  # Re-raise if it's a different error
+            # If directory exists, just continue
+            self.logger.info("Directory already exists")
+        
+        with open(file_name + "metrics.json", "w") as f:
 		    json.dump(self.metrics, f, indent=2)
         
-        with open("/results/metrics.csv", "w") as f:
+        with open(file_name + "metrics.csv", "w") as f:
             writer = csv.DictWriter(f, fieldnames=self.metrics[0].keys())
             writer.writeheader()
             writer.writerows(self.metrics)
-        
+            
+        # write final calculated performance parameters
+        n = len(self.metrics)
+        total_rejected_flows = self.metrics[-1]['rejected_flows']
+        total_packet_in_flows = self.metrics[-1]['packet_in_count']
+        avg_table_occupancy = sum(r["table_occupancy"] for r in self.metrics) / n
+        avg_cpu_percent = sum(r["cpu_percent"] for r in self.metrics) / n
+        avg_memory_mb = sum(r["memory_mb"] for r in self.metrics) / n
+        summary = {
+			"total_rejected_flows": total_rejected_flows,
+			"total_packet_in_flows": total_packet_in_flows,
+			"avg_table_occupancy_percent": (avg_table_occupancy * 100.0) / self.TCAM_MAX,
+			"avg_cpu_percent": avg_cpu_percent,
+			"avg_memory_mb": avg_memory_mb
+		}
+        with open(file_name + "summary.json", "w") as f:
+            json.dump(summary, f, indent=2)
     def add_flow(self, datapath, priority, match, actions, buffer_id=None, idle_timeout=0, hard_timeout=0):
         ofproto = datapath.ofproto
         parser = datapath.ofproto_parser
@@ -233,7 +275,7 @@ class SimpleSwitch13(app_manager.RyuApp):
 
         cv = std / mean if mean > 0 else 1
 
-        # lower CV → more periodic
+        # lower CV  more periodic
         periodic_score = max(0, 1 - cv)
 
         return periodic_score

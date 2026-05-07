@@ -20,6 +20,7 @@ import os
 import psutil
 import signal
 import atexit
+import errno
 from oslo_config import cfg
 from collections import defaultdict, deque
 from ryu.base import app_manager
@@ -118,7 +119,7 @@ class SimpleSwitch13(app_manager.RyuApp):
 		self.logger.info(record)
 		self.metrics.append(record)
 		
-	def _proactive_eviction(self):
+    def _proactive_eviction(self):
         occupancy = len(self.flow_stats)
 
         if occupancy < self.high_threshold * self.TCAM_MAX:
@@ -147,12 +148,14 @@ class SimpleSwitch13(app_manager.RyuApp):
         eviction_table.sort(key=lambda x: x[0])  # lowest first
 
         target = int(self.low_threshold * self.TCAM_MAX)
+        to_evict = len(self.flow_stats) - target  # how many to remove
 
-        while len(self.flow_stats) > target and eviction_table:
-
-            metric, key = eviction_table.pop(0)
-
+        count = 0
+        for metric, key in eviction_table:
+            if count >= to_evict:
+                break
             self._delete_flow(key)
+            count += 1
     def _delete_flow(self, key):
 
         src, dst, in_port = key
@@ -267,11 +270,19 @@ class SimpleSwitch13(app_manager.RyuApp):
         
         if not self.metrics:
 		    return
-        
-        with open("/results/metrics.json", "w") as f:
+        file_name = "/results/vita/" + str(self.TCAM_MAX) + "/"
+        try:
+            os.makedirs(file_name)
+        except OSError as e:
+            if e.errno != errno.EEXIST:
+                raise  # Re-raise if it's a different error
+            # If directory exists, just continue
+            self.logger.info("Directory already exists")
+        #os.makedirs(file_name)
+        with open(file_name + "metrics.json", "w") as f:
 		    json.dump(self.metrics, f, indent=2)
         
-        with open("/results/metrics.csv", "w") as f:
+        with open(file_name + "metrics.csv", "w") as f:
             writer = csv.DictWriter(f, fieldnames=self.metrics[0].keys())
             writer.writeheader()
             writer.writerows(self.metrics)

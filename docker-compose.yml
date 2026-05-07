@@ -21,8 +21,8 @@ services:
     build: ./mininet
     container_name: mininet
     privileged: true
-    stdin_open: true      # Add this
-    tty: true             # Add this
+    stdin_open: true
+    tty: true
     command: >
       bash -c "service openvswitch-switch start && 
              sleep 2 && 

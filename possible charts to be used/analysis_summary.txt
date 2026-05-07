@@ -1,0 +1,67 @@
+============================================================
+METRICS ANALYSIS SUMMARY
+Generated: 2026-04-01 14:18:43
+============================================================
+
+
+────────────────────────────────────────────────────────────
+TCAM SIZE: 750
+────────────────────────────────────────────────────────────
+
+CPU Usage (%):
+  fixed     : 12.11%
+  adaptive  : 15.90%
+  vita      : 16.35%
+
+Table Occupancy (% of TCAM size):
+  fixed     : 82.51% (raw: 619 entries of 750)
+  adaptive  : 82.28% (raw: 617 entries of 750)
+  vita      : 82.55% (raw: 619 entries of 750)
+
+Rejected Flows:
+  fixed     : 9416
+  adaptive  : 7016
+  vita      : 7604
+
+Memory (MB):
+  fixed     : 40.15
+  adaptive  : 39.69
+  vita      : 40.46
+
+Packet-In Count:
+  fixed     : 23352
+  adaptive  : 21995
+  vita      : 24885
+
+────────────────────────────────────────────────────────────
+TCAM SIZE: 1000
+────────────────────────────────────────────────────────────
+
+CPU Usage (%):
+  fixed     : 13.94%
+  adaptive  : 15.50%
+  vita      : 16.32%
+
+Table Occupancy (% of TCAM size):
+  fixed     : 82.63% (raw: 826 entries of 1000)
+  adaptive  : 81.40% (raw: 814 entries of 1000)
+  vita      : 81.66% (raw: 817 entries of 1000)
+
+Rejected Flows:
+  fixed     : 3856
+  adaptive  : 1753
+  vita      : 1674
+
+Memory (MB):
+  fixed     : 40.45
+  adaptive  : 40.43
+  vita      : 41.23
+
+Packet-In Count:
+  fixed     : 24237
+  adaptive  : 21655
+  vita      : 22675
+
+============================================================
+END OF SUMMARY
+============================================================

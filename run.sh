@@ -7,7 +7,8 @@ sudo docker compose up --build -d ryu
 
 echo "Waiting for controller to be ready..."
 sleep 5
-
 echo "Running Mininet topology..."
 cd mininet
 sudo python3 topology.py
+cd ..
+python3 barchart.py

@@ -1,0 +1,7 @@
+{
+  "avg_cpu_percent": 12.965254237288137, 
+  "total_packet_in_flows": 23097, 
+  "total_rejected_flows": 7874, 
+  "avg_table_occupancy_percent": 84.13333333333334, 
+  "avg_memory_mb": 39
+}
