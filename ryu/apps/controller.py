@@ -66,7 +66,7 @@ class SimpleSwitch13(app_manager.RyuApp):
             "last_seen": None,
             "iat_window": deque(maxlen=10),  # inter-arrival samples
         })
-        self.TCAM_MAX = 750
+        self.TCAM_MAX = 1000
         # --- Parameters (thesis-controlled) ---
         self.T_MIN = T_MIN
         self.T_MAX = T_MAX
@@ -191,7 +191,7 @@ class SimpleSwitch13(app_manager.RyuApp):
         actions = [parser.OFPActionOutput(ofproto.OFPP_CONTROLLER,
                                           ofproto.OFPCML_NO_BUFFER)]
         self.add_flow(datapath, 0, match, actions)
-        self.datapaths = {}
+        #self.datapaths = {}
         self.datapaths[datapath.id] = datapath
     @set_ev_cls(ofp_event.EventOFPFlowStatsReply, MAIN_DISPATCHER)
     def flow_stats_reply_handler(self, ev):

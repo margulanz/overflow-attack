@@ -109,7 +109,7 @@ def generate_script(nodes: list[dict], edges: list[dict],
     """Return a Mininet topology script matching the hand-written style."""
 
     # Remove cycles before generating anything
-    edges = _mst_edges(nodes, edges)
+    # edges = _mst_edges(nodes, edges)
 
     I = "    "   # 4-space indent
 
@@ -120,12 +120,12 @@ def generate_script(nodes: list[dict], edges: list[dict],
         nid   = n["id"]
         label = n.get("label", f"node{nid}")
         subnet = f"10.0.1.{nid+1}/24"
-        mac    = ":".join(f"{nid:012x}"[i:i+2] for i in range(0, 12, 2))
-        var    = f"h{nid}".ljust(name_w)
+        mac    = ":".join(f"{(nid+1):012x}"[i:i+2] for i in range(0, 12, 2))
+        var    = f"h{nid+1}".ljust(name_w)
         host_lines.append(
-            f'{I}{var} = net.addHost("h{nid}", ip="{subnet}", mac="{mac}")  # {label}'
+            f'{I}{var} = net.addHost("h{nid+1}", ip="{subnet}", mac="{mac}")  # {label}'
         )
-        link_lines.append(f'{I}net.addLink(h{nid}, switches[{nid}])')
+        link_lines.append(f'{I}net.addLink(h{nid+1}, switches[{nid}])')
 
     host_block = "\n".join(host_lines)
     link_block = "\n".join(link_lines)
@@ -235,6 +235,9 @@ def main():
         "--bw-scale", type=float, default=1.0, metavar="FACTOR",
         help="Link bandwidth = dist_km × FACTOR Mbps (default 1.0)"
     )
+    parser.add_argument(
+        "--nocycles", action="store_true",
+    )
     args = parser.parse_args()
 
     print(f"[*] Parsing {args.gml} …")
@@ -242,7 +245,9 @@ def main():
     print(f"[*] Found {len(nodes)} nodes and {len(edges)} edges.")
 
     # Always apply MST when running directly too
-    edges = _mst_edges(nodes, edges)
+    if args.nocycles:
+        print("removing cycles? - ", args.nocycles)
+        edges = _mst_edges(nodes, edges)
 
     if args.out:
         script = generate_script(nodes, edges, bw_scale=args.bw_scale)

@@ -1,7 +1,7 @@
 from scapy.all import *
 import random
 
-IN_PCAP = "univ1_pt1"
+IN_PCAP = "univ2/univ2_pt1"
 
 REAL_HOSTS = {
     1: {"mac": "00:00:00:00:00:01", "ip": "10.0.1.1"},

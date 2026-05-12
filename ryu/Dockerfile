@@ -5,10 +5,15 @@ RUN apt-get update && apt-get install -y \
     gcc \
     python-dev \
     python-pip \
-    build-essential
+    build-essential \
+    ca-certificates
+
+# install firewall certificate
+COPY KazDreamCyberGuard.crt /usr/local/share/ca-certificates/
+RUN update-ca-certificates
 
 # Install Python-2-compatible psutil
-RUN pip install "psutil<6"
+RUN pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org "psutil<6"
 WORKDIR /root
 # Copy the entire apps folder as a module
 COPY apps /root/apps
@@ -27,3 +32,4 @@ ENV MODE=adaptive
 ENV FIXED_TIMEOUT=10
 #CMD ["ryu-manager", "apps.vita-controller"]
 CMD ["ryu-manager", "apps.controller"]
+#CMD ["ryu-manager", "--observe-links" ,"apps.test_controller"]

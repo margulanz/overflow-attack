@@ -55,7 +55,7 @@ def run():
     start_ts = time.time()
 
     # BLOCKING call → guarantees same timing
-    folder = "univ1/"
+    folder = "univ2/"
     h1.cmd(tcpreplay_cmd + "--intf1=h1-eth0 " + folder + "h1.pcap &")
     h2.cmd(tcpreplay_cmd + "--intf1=h2-eth0 " + folder + "h2.pcap &")
     h3.cmd(tcpreplay_cmd + "--intf1=h3-eth0 " + folder + "h3.pcap &")

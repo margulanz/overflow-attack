@@ -1,5 +1,3 @@
-
-
 import math
 import time
 import csv
@@ -29,7 +27,7 @@ GAMMA         = float(os.environ.get('GAMMA',   3.4))
 ETA           = float(os.environ.get('ETA',     5))
 THETA         = float(os.environ.get('THETA',   100))
 
-LLDP_INTERVAL = 5   # seconds between LLDP probe rounds
+LLDP_INTERVAL = 5
 
 
 class SimpleSwitch13(app_manager.RyuApp):
@@ -38,15 +36,13 @@ class SimpleSwitch13(app_manager.RyuApp):
 
     def __init__(self, *args, **kwargs):
         super(SimpleSwitch13, self).__init__(*args, **kwargs)
-        self.mac_to_port = {}        
-        self.mac_to_dpid = {}        
-        self.datapaths   = {}        
-        self.port_state  = {}        
-
-        
-        self.adjacency = {}
-        
-        self.graph = defaultdict(dict)
+        self.mac_to_port    = {}
+        self.mac_to_dpid    = {}
+        self.datapaths      = {}
+        self.port_state     = {}
+        self.adjacency      = {}
+        self.graph          = defaultdict(dict)
+        self.inter_sw_ports = defaultdict(set)
 
         self.mode          = MODE
         self.fixed_timeout = FIXED_TIMEOUT
@@ -79,10 +75,6 @@ class SimpleSwitch13(app_manager.RyuApp):
         signal.signal(signal.SIGINT,  self._signal_handler)
         atexit.register(self._write_metrics)
 
-    # ==================================================================
-    # Switch connect
-    # ==================================================================
-
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
     def switch_features_handler(self, ev):
         datapath = ev.msg.datapath
@@ -91,13 +83,11 @@ class SimpleSwitch13(app_manager.RyuApp):
 
         self.datapaths[datapath.id] = datapath
 
-        # table-miss  controller
         match   = parser.OFPMatch()
         actions = [parser.OFPActionOutput(ofproto.OFPP_CONTROLLER,
                                           ofproto.OFPCML_NO_BUFFER)]
         self.add_flow(datapath, 0, match, actions)
 
-        # Request port list so we know which ports to probe with LLDP
         req = parser.OFPPortDescStatsRequest(datapath, 0)
         datapath.send_msg(req)
 
@@ -120,17 +110,12 @@ class SimpleSwitch13(app_manager.RyuApp):
             self.port_state[dp.id][port.port_no] = port
         elif msg.reason == ofproto.OFPPR_DELETE:
             self.port_state[dp.id].pop(port.port_no, None)
-            stale = [k for k in self.adjacency
-                     if k == (dp.id, port.port_no)]
+            stale = [k for k in self.adjacency if k == (dp.id, port.port_no)]
             for k in stale:
                 peer = self.adjacency.pop(k, None)
                 if peer:
                     self.adjacency.pop(peer, None)
             self._rebuild_graph()
-
-    # ==================================================================
-    # LLDP  topology discovery
-    # ==================================================================
 
     def _lldp_loop(self):
         hub.sleep(3)
@@ -196,10 +181,9 @@ class SimpleSwitch13(app_manager.RyuApp):
         for (dpid_a, port_a), (dpid_b, _) in self.adjacency.items():
             g[dpid_a][dpid_b] = port_a
         self.graph = g
-
-    # ==================================================================
-    # PacketIn
-    # ==================================================================
+        self.inter_sw_ports = defaultdict(set)
+        for (dpid_a, port_a) in self.adjacency:
+            self.inter_sw_ports[dpid_a].add(port_a)
 
     @set_ev_cls(ofp_event.EventOFPPacketIn, MAIN_DISPATCHER)
     def _packet_in_handler(self, ev):
@@ -208,7 +192,6 @@ class SimpleSwitch13(app_manager.RyuApp):
         msg      = ev.msg
         datapath = msg.datapath
         ofproto  = datapath.ofproto
-        parser   = datapath.ofproto_parser
         in_port  = msg.match['in_port']
 
         pkt = packet.Packet(msg.data)
@@ -222,15 +205,16 @@ class SimpleSwitch13(app_manager.RyuApp):
         src  = eth.src
         dpid = datapath.id
 
+        self.logger.info("PKT_IN dpid=%s in_port=%s src=%s dst=%s graph_size=%d",
+                         dpid, in_port, src, dst, len(self.graph))
+
         self.mac_to_port.setdefault(dpid, {})
         flow_id = (src, dst, in_port)
 
-        # TCAM guard
         if flow_id not in self.flow_stats and len(self.flow_stats) >= self.TCAM_MAX:
             self.rejected_flows += 1
             return
 
-        # Update flow stats
         now  = time.time()
         flow = self.flow_stats[flow_id]
         flow["packet_count"] += 1
@@ -238,51 +222,42 @@ class SimpleSwitch13(app_manager.RyuApp):
             flow["iat_window"].append(now - flow["last_seen"])
         flow["last_seen"] = now
 
-        # Learn source MAC on this switch
-        self.mac_to_port[dpid][src] = in_port
-        self.mac_to_dpid[src]       = dpid   # FIX: maintain fast reverse lookup
+        if in_port not in self.inter_sw_ports.get(dpid, set()):
+            self.mac_to_port[dpid][src] = in_port
+            self.mac_to_dpid[src]       = dpid
 
-        #  Forwarding decision 
         if dst in self.mac_to_port[dpid]:
-            # Dst is directly reachable on this switch
             out_port = self.mac_to_port[dpid][dst]
+            self.logger.info("LOCAL dpid=%s dst=%s out_port=%s", dpid, dst, out_port)
             self._install_and_send(datapath, msg, in_port, out_port,
                                    dst, src, flow_id)
 
         elif dst.startswith('ff:') or dst.startswith('33:'):
-            # Broadcast  multicast
+            self.logger.info("FLOOD dpid=%s graph=%s inter_sw=%s",
+                             dpid, dict(self.graph), dict(self.inter_sw_ports))
             self._spanning_flood(datapath, msg, in_port)
 
         else:
-            # Unknown unicast  try shortest path
-            dst_dpid = self.mac_to_dpid.get(dst)          # FIX: use fast lookup
+            dst_dpid = self.mac_to_dpid.get(dst)
+            self.logger.info("UNICAST dpid=%s dst=%s dst_dpid=%s", dpid, dst, dst_dpid)
             if dst_dpid is None:
                 self._spanning_flood(datapath, msg, in_port)
             else:
                 path = self._bfs_path(dpid, dst_dpid)
+                self.logger.info("PATH %s->%s: %s complete=%s",
+                                 dpid, dst_dpid, path,
+                                 self._path_is_complete(path, dst) if path else False)
                 if path and self._path_is_complete(path, dst):
                     self._install_path(path, src, dst, msg, in_port)
                 else:
-                    # Path incomplete (graph still converging)  flood for now
                     self._spanning_flood(datapath, msg, in_port)
 
-    # ==================================================================
-    # Path helpers
-    # ==================================================================
-
     def _path_is_complete(self, path, dst_mac):
-        """
-        Verify every hop in the path has a known egress port before
-        committing flows. Avoids installing broken partial paths while
-        the LLDP graph is still converging.
-        """
         for i, dpid in enumerate(path):
             if i == len(path) - 1:
-                # Last hop: must know dst MAC port on that switch
                 if dst_mac not in self.mac_to_port.get(dpid, {}):
                     return False
             else:
-                # Intermediate hop: must know port toward next switch
                 if path[i + 1] not in self.graph.get(dpid, {}):
                     return False
         return True
@@ -303,16 +278,11 @@ class SimpleSwitch13(app_manager.RyuApp):
         return None
 
     def _install_path(self, path, src_mac, dst_mac, msg, first_in_port):
-        """
-        Install forwarding rules on every switch along the path,
-        then send the buffered packet out of the first switch.
-        """
         for i, dpid in enumerate(path):
             dp = self.datapaths.get(dpid)
             if dp is None:
                 continue
 
-            # Determine egress port for this hop
             if i == len(path) - 1:
                 out_port = self.mac_to_port[dpid][dst_mac]
             else:
@@ -323,8 +293,6 @@ class SimpleSwitch13(app_manager.RyuApp):
             fid     = (src_mac, dst_mac, first_in_port if i == 0 else 0)
             ito     = self._get_idle_timeout(fid)
 
-            # FIX: only match in_port on the ingress switch to avoid
-            # collisions on intermediate switches that have no in_port context
             if i == 0:
                 match = parser.OFPMatch(in_port=first_in_port,
                                         eth_dst=dst_mac, eth_src=src_mac)
@@ -334,7 +302,6 @@ class SimpleSwitch13(app_manager.RyuApp):
             self.add_flow(dp, 1, match, actions,
                           idle_timeout=ito, hard_timeout=ito * 2)
 
-        # Send the original packet out of the first switch
         first_dp = self.datapaths.get(path[0])
         if first_dp is None:
             return
@@ -374,26 +341,64 @@ class SimpleSwitch13(app_manager.RyuApp):
 
     def _spanning_flood(self, datapath, msg, in_port):
         ofproto = datapath.ofproto
-        parser = datapath.ofproto_parser
+        parser  = datapath.ofproto_parser
 
-        actions = [parser.OFPActionOutput(ofproto.OFPP_FLOOD)]
+        if not self.graph:
+            data = msg.data if msg.buffer_id == ofproto.OFP_NO_BUFFER else None
+            datapath.send_msg(parser.OFPPacketOut(
+                datapath=datapath,
+                buffer_id=msg.buffer_id,
+                in_port=in_port,
+                actions=[parser.OFPActionOutput(ofproto.OFPP_FLOOD)],
+                data=data,
+            ))
+            return
 
-        data = None
-        if msg.buffer_id == ofproto.OFP_NO_BUFFER:
-            data = msg.data
+        visited    = {datapath.id}
+        queue      = deque([datapath.id])
+        tree_ports = defaultdict(list)
 
-        out = parser.OFPPacketOut(
-        datapath=datapath,
-        buffer_id=msg.buffer_id,
-        in_port=in_port,
-        actions=actions,
-        data=data
-    )
+        while queue:
+            node = queue.popleft()
+            for neighbour, port in self.graph.get(node, {}).items():
+                if neighbour not in visited:
+                    visited.add(neighbour)
+                    tree_ports[node].append(port)
+                    queue.append(neighbour)
 
-        datapath.send_msg(out)
-    # ==================================================================
-    # Adaptive timeout
-    # ==================================================================
+        def host_ports(dpid):
+            sw_ports = self.inter_sw_ports.get(dpid, set())
+            return [p for p in self.port_state.get(dpid, {})
+                    if p not in sw_ports]
+
+        root_out = [p for p in tree_ports[datapath.id] + host_ports(datapath.id)
+                    if p != in_port]
+        if root_out:
+            data = msg.data if msg.buffer_id == ofproto.OFP_NO_BUFFER else None
+            datapath.send_msg(parser.OFPPacketOut(
+                datapath=datapath,
+                buffer_id=msg.buffer_id,
+                in_port=in_port,
+                actions=[parser.OFPActionOutput(p) for p in root_out],
+                data=data,
+            ))
+
+        for dpid, ports in tree_ports.items():
+            if dpid == datapath.id:
+                continue
+            dp = self.datapaths.get(dpid)
+            if dp is None:
+                continue
+            out_ports = ports + host_ports(dpid)
+            if out_ports:
+                dp.send_msg(dp.ofproto_parser.OFPPacketOut(
+                    datapath=dp,
+                    buffer_id=dp.ofproto.OFP_NO_BUFFER,
+                    in_port=dp.ofproto.OFPP_CONTROLLER,
+                    actions=[dp.ofproto_parser.OFPActionOutput(p)
+                             for p in out_ports],
+                    data=msg.data,
+                ))
 
     def _get_idle_timeout(self, flow_id):
         if self.mode == "adaptive":
@@ -432,10 +437,6 @@ class SimpleSwitch13(app_manager.RyuApp):
         cv   = std / mean if mean > 0 else 1
         return max(0, 1 - cv)
 
-    # ==================================================================
-    # Flow mod
-    # ==================================================================
-
     def add_flow(self, datapath, priority, match, actions,
                  buffer_id=None, idle_timeout=0, hard_timeout=0):
         ofproto = datapath.ofproto
@@ -450,10 +451,6 @@ class SimpleSwitch13(app_manager.RyuApp):
             kwargs['buffer_id'] = buffer_id
         datapath.send_msg(parser.OFPFlowMod(**kwargs))
 
-    # ==================================================================
-    # Flow removed / stats
-    # ==================================================================
-
     @set_ev_cls(ofp_event.EventOFPFlowRemoved, MAIN_DISPATCHER)
     def flow_removed_handler(self, ev):
         match   = ev.msg.match
@@ -462,7 +459,6 @@ class SimpleSwitch13(app_manager.RyuApp):
         eth_dst = match.get('eth_dst')
         if in_port and eth_src and eth_dst:
             self.flow_stats.pop((eth_src, eth_dst, in_port), None)
-        # FIX: also clean up mac_to_dpid if this was the last flow for that MAC
         if eth_src and self.mac_to_dpid.get(eth_src) is not None:
             dpid = self.mac_to_dpid[eth_src]
             if eth_src not in self.mac_to_port.get(dpid, {}):
@@ -482,10 +478,6 @@ class SimpleSwitch13(app_manager.RyuApp):
 
     def _request_stats(self, datapath):
         datapath.send_msg(datapath.ofproto_parser.OFPFlowStatsRequest(datapath))
-
-    # ==================================================================
-    # Monitoring metrics
-    # ==================================================================
 
     def _monitor(self):
         while True:

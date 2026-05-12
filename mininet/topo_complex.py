@@ -20,17 +20,17 @@ def run():
         port=RYU_CONTROLLER_PORT
     )
     # Create 6 hosts
-    h1 = net.addHost('h1', ip='10.0.1.1/24',mac='00:00:00:00:00:01')
-    h2 = net.addHost('h2', ip='10.0.1.2/24', mac='00:00:00:00:00:02')
-    h3 = net.addHost('h3', ip='10.0.1.3/24', mac='00:00:00:00:00:03')
-    h4 = net.addHost('h4', ip='10.0.1.4/24', mac='00:00:00:00:00:04')
-    h5 = net.addHost('h5', ip='10.0.1.5/24', mac='00:00:00:00:00:05')
-    h6 = net.addHost('h6', ip='10.0.1.6/24', mac='00:00:00:00:00:06')
+    h1 = net.addHost('h1', ip='10.0.1.1/24')
+    h2 = net.addHost('h2', ip='10.0.1.2/24')
+    h3 = net.addHost('h3', ip='10.0.1.3/24')
+    h4 = net.addHost('h4', ip='10.0.1.4/24')
+    h5 = net.addHost('h5', ip='10.0.1.5/24')
+    h6 = net.addHost('h6', ip='10.0.1.6/24')
 
     # Create 4 switches with multiple links
     s1 = net.addSwitch('s1',protocols='OpenFlow13')
     s2 = net.addSwitch('s2', protocols='OpenFlow13')
-    #s3 = net.addSwitch('s3', protocols='OpenFlow13')
+    s3 = net.addSwitch('s3', protocols='OpenFlow13')
     #s4 = net.addSwitch('s4', protocols='OpenFlow13')
     
 
@@ -39,13 +39,13 @@ def run():
     net.addLink(h2, s1)
     net.addLink(h3, s2)
     net.addLink(h4, s2)
-    net.addLink(h5, s2)
-    net.addLink(h6, s2)
+    net.addLink(h5, s3)
+    net.addLink(h6, s3)
    
     # Switch mesh (multiple paths)
     net.addLink(s1, s2)
-    #net.addLink(s2, s3)
-    #net.addLink(s3, s4)
+    net.addLink(s2, s3)
+    net.addLink(s3, s1)
 
     # Start network
     net.start()

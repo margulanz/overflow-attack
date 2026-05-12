@@ -11,4 +11,3 @@ echo "Running Mininet topology..."
 cd mininet
 sudo python3 topology.py
 cd ..
-python3 barchart.py
