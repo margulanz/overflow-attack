@@ -89,22 +89,17 @@ def build_topology() -> None:
     info("*** Run pingall twice: first pass seeds MACs, second confirms\n")
     print("\n=== Network is running ===")
     tcpreplay_cmd = "tcpreplay --multiplier=1 --limit=100000 "
-    start_ts = time.time()
 
     # BLOCKING call → guarantees same timing
     folder = "univ2/"
-    h1.cmd(tcpreplay_cmd + "--intf1=h1-eth0 " + folder + "h1.pcap &")
-    h2.cmd(tcpreplay_cmd + "--intf1=h2-eth0 " + folder + "h2.pcap &")
-    h3.cmd(tcpreplay_cmd + "--intf1=h3-eth0 " + folder + "h3.pcap &")
-    h4.cmd(tcpreplay_cmd + "--intf1=h4-eth0 " + folder + "h4.pcap &")
-    h5.cmd(tcpreplay_cmd + "--intf1=h5-eth0 " + folder + "h5.pcap &")
-    h6.cmd(tcpreplay_cmd + "--intf1=h6-eth0 " + folder + "h6.pcap &")
-    time.sleep(50)
-    end_ts = time.time()
+    for h, pcap in [(h1,"h1"), (h2,"h2"), (h3,"h3"),
+                (h4,"h4"), (h5,"h5"), (h6,"h6")]:
+        h.sendCmd(tcpreplay_cmd + f"--intf1={h.name}-eth0 {folder}{pcap}.pcap")
 
-    print(f"*** tcpreplay finished in {end_ts - start_ts:.2f}s")
+    # Now wait for all of them to finish
     for h in [h1, h2, h3, h4, h5, h6]:
-        h.cmd("pkill -f tcpreplay")
+        h.waitOutput()
+
     info("*** Stopping network\n")
     net.stop()
     cleanup()

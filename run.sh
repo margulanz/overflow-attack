@@ -9,5 +9,5 @@ echo "Waiting for controller to be ready..."
 sleep 5
 echo "Running Mininet topology..."
 cd mininet
-sudo python3 topology.py
+sudo python3 topologies/germany_topo.py
 cd ..
